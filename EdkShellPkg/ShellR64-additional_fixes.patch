@@ -1,0 +1,1997 @@
+ DeviceTree/devicetree.c    |   3 ++
+ EfiCompress/CompressMain.c |   3 ++
+ EfiDecompress/Decompress.c |   3 ++
+ IfConfig/IfConfig.c        |   5 +++
+ IpConfig/IpConfig.c        |   3 ++
+ Library/DPath.c            |   4 +-
+ Library/Handle.c           |   2 +-
+ Library/Handle.h           |   2 +-
+ Library/IO.c               | 100 ++++++++++++++++++++++++++++-----------------
+ Library/Misc.c             |  56 ++++++++++++++-----------
+ LoadPciRom/LoadPciRom.c    |   3 ++
+ SmbiosView/smbiosview.c    |   3 ++
+ TelnetMgmt/TelnetMgmt.c    |   3 ++
+ comp/comp.c                |   3 ++
+ dblk/dblk.c                |   3 ++
+ devices/devices.c          |   3 ++
+ dmem/mem.c                 |   3 ++
+ dmpstore/dmpstore.c        |   3 ++
+ edit/libEditor.c           |   6 +--
+ edit/libFileBuffer.c       |  90 +++++++++++++++-------------------------
+ edit/libMisc.c             |  12 +++---
+ edit/libeditor.h           |   2 +-
+ edit/libfilebuffer.h       |   2 +-
+ edit/main.c                |  13 ++----
+ err/err.c                  |   3 ++
+ guid/guid.c                |   3 ++
+ hexedit/libMemImage.c      |   4 ++
+ hexedit/main.c             |   3 ++
+ mem/mm.c                   |   3 ++
+ memmap/memmap.c            |   3 ++
+ mm/mm.c                    |   3 ++
+ mode/mode.c                |   3 ++
+ mount/mount.c              |   3 ++
+ newshell/FakeHii.c         |  17 ++++++--
+ newshell/FakeHii.h         |  11 +++++
+ openinfo/openinfo.c        |   3 ++
+ pci/pci.c                  |   3 ++
+ sermode/sermode.c          |   3 ++
+ shellenv/ConsoleProxy.c    |   3 +-
+ shellenv/cmddisp.c         |   2 +
+ shellenv/echo.c            |   1 +
+ shellenv/shelle.h          |   3 ++
+ stall/stall.c              |   3 ++
+ time/TimeStrings.uni       | Bin 7166 -> 7318 bytes
+ time/time.c                |  20 ++++++---
+ tzone/TZoneStrings.uni     | Bin 22848 -> 23010 bytes
+ tzone/tzone.c              |   7 ++++
+ 47 files changed, 281 insertions(+), 153 deletions(-)
+
+diff --git a/DeviceTree/devicetree.c b/DeviceTree/devicetree.c
+index 77e3cf4..db887fe 100644
+--- a/DeviceTree/devicetree.c
++++ b/DeviceTree/devicetree.c
+@@ -81,6 +81,7 @@ ShellDeviceTree (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ DevicetreeMain (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -99,6 +100,7 @@ EFI_BOOTSHELL_CODE(
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ DevicetreeMain (
+   IN EFI_HANDLE               ImageHandle,
+   IN EFI_SYSTEM_TABLE         *SystemTable
+@@ -487,6 +489,7 @@ Returns:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ DevicetreeMainGetLineHelp (
+   OUT CHAR16                **Str
+   )
+diff --git a/EfiCompress/CompressMain.c b/EfiCompress/CompressMain.c
+index 082046e..10efbdf 100644
+--- a/EfiCompress/CompressMain.c
++++ b/EfiCompress/CompressMain.c
+@@ -58,6 +58,7 @@ SHELL_VAR_CHECK_ITEM    CompressCheckList[] = {
+ // Function declarations
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeCompress (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -71,6 +72,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeCompress (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -444,6 +446,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeCompressGetLineHelp (
+   OUT CHAR16                     **Str
+   )
+diff --git a/EfiDecompress/Decompress.c b/EfiDecompress/Decompress.c
+index 2ee0404..1f5fc07 100644
+--- a/EfiDecompress/Decompress.c
++++ b/EfiDecompress/Decompress.c
+@@ -60,6 +60,7 @@ SHELL_VAR_CHECK_ITEM    DecompressCheckList[] = {
+ // Function declarations
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeDecompress (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -73,6 +74,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeDecompress (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -486,6 +488,7 @@ Quit:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeDecompressGetLineHelp (
+   OUT CHAR16                  **Str
+   )
+diff --git a/IfConfig/IfConfig.c b/IfConfig/IfConfig.c
+index 52e1add..41c4855 100644
+--- a/IfConfig/IfConfig.c
++++ b/IfConfig/IfConfig.c
+@@ -1072,7 +1072,12 @@ Returns:
+     //
+     // Get media status
+     //
++#if (EFI_SPECIFICATION_VERSION >= 0x0002000A)
+     IfConfigGetNicMediaStatus (ImageHandle, Handles[Index], &NicInfo->MediaPresentSupported, &NicInfo->MediaPresent);
++#else
++    NicInfo->MediaPresentSupported = FALSE;
++    NicInfo->MediaPresent = FALSE;
++#endif
+ 
+     InsertTailList (&NicInfoList, &NicInfo->Link);
+     
+diff --git a/IpConfig/IpConfig.c b/IpConfig/IpConfig.c
+index 474e5f1..033f9af 100644
+--- a/IpConfig/IpConfig.c
++++ b/IpConfig/IpConfig.c
+@@ -88,6 +88,7 @@ SHELL_VAR_CHECK_ITEM  IpconfigCheckList[] = {
+ #define IP_STRING_MAX_LENGTH  32
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeIpConfig (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -334,6 +335,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeIpConfig (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -862,6 +864,7 @@ Returns:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeIpConfigGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/Library/DPath.c b/Library/DPath.c
+index 73086d7..ab98bfc 100644
+--- a/Library/DPath.c
++++ b/Library/DPath.c
+@@ -1824,7 +1824,7 @@ Returns:
+ 
+   return FALSE;
+ }
+-
++#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+ EFI_DEVICE_PATH_PROTOCOL *
+ LibDuplicateDevicePathInstance (
+   IN EFI_DEVICE_PATH_PROTOCOL  *DevPath
+@@ -1873,7 +1873,7 @@ Returns:
+ 
+   return NewDevPath;
+ }
+-
++#pragma GCC diagnostic pop
+ INTN
+ DevicePathCompare (
+   IN  EFI_DEVICE_PATH_PROTOCOL *DevicePath1,
+diff --git a/Library/Handle.c b/Library/Handle.c
+index 45e623c..045cadb 100644
+--- a/Library/Handle.c
++++ b/Library/Handle.c
+@@ -545,7 +545,7 @@ Returns:
+ 
+ EFI_STATUS
+ LibReinstallProtocolInterfaces (
+-  IN OUT EFI_HANDLE             *Handle,
++  IN EFI_HANDLE             Handle,
+   ...
+   )
+ /*++
+diff --git a/Library/Handle.h b/Library/Handle.h
+index 40ad40b..ea459e0 100644
+--- a/Library/Handle.h
++++ b/Library/Handle.h
+@@ -107,7 +107,7 @@ LibUninstallProtocolInterfaces (
+ 
+ EFI_STATUS
+ LibReinstallProtocolInterfaces (
+-  IN OUT EFI_HANDLE                   *Handle,
++  IN EFI_HANDLE                       Handle,
+   ...
+   );
+ 
+diff --git a/Library/IO.c b/Library/IO.c
+index 0e1e2ea..458a19d 100644
+--- a/Library/IO.c
++++ b/Library/IO.c
+@@ -49,6 +49,20 @@ typedef struct _pitem {
+   BOOLEAN Long;
+ } PRINT_ITEM;
+ 
++typedef
++EFI_STATUS
++(EFIAPI *GENERIC_OUTPUT_STRING) (
++  VOID    *context,
++  CHAR16  *str
++  );
++
++typedef
++EFI_STATUS
++(EFIAPI *GENERIC_SET_ATTRIBUTE) (
++  VOID    *context,
++  UINTN   attr
++  );
++
+ typedef struct _pstate {
+   //
+   // Input
+@@ -73,9 +87,9 @@ typedef struct _pstate {
+   UINTN   AttrBlueColor;
+   UINTN   AttrGreenColor;
+ 
+-  INTN (*Output) (VOID *context, CHAR16 *str);
+-  INTN (*SetAttr) (VOID *context, UINTN attr);
+-  VOID          *Context;
++  GENERIC_OUTPUT_STRING Output;
++  GENERIC_SET_ATTRIBUTE SetAttr;
++  VOID    *Context;
+ 
+   //
+   // Current item being formatted
+@@ -105,7 +119,8 @@ _Print (
+   IN PRINT_STATE     *ps
+   );
+ 
+-INTN
++EFI_STATUS
++EFIAPI
+ _SPrint (
+   IN VOID     *Context,
+   IN CHAR16   *Buffer
+@@ -126,16 +141,11 @@ _PoolCatPrint (
+   IN CHAR16               *fmt,
+   IN VA_LIST              args,
+   IN OUT POOL_PRINT       *spc,
+-  IN INTN
+-    (
+-  *Output)
+-    (
+-      VOID *context,
+-      CHAR16 *str
+-    )
++  IN GENERIC_OUTPUT_STRING Output
+   );
+ 
+-INTN
++EFI_STATUS
++EFIAPI
+ _PoolPrint (
+   IN VOID     *Context,
+   IN CHAR16   *Buffer
+@@ -190,13 +200,35 @@ SetCursorPosition (
+   IN  UINTN                           Len
+   );
+ 
+-INTN
++EFI_STATUS
++EFIAPI
+ _DbgOut (
+   IN VOID     *Context,
+   IN CHAR16   *Buffer
+   );
+ 
+-INTN
++static
++inline
++GENERIC_OUTPUT_STRING
++GenericOutputStringCast (
++  EFI_TEXT_OUTPUT_STRING fn
++  )
++{
++  return (GENERIC_OUTPUT_STRING) fn;
++}
++
++static
++inline
++GENERIC_SET_ATTRIBUTE
++GenericSetAttributeCast (
++  EFI_TEXT_SET_ATTRIBUTE fn
++  )
++{
++  return (GENERIC_SET_ATTRIBUTE) fn;
++}
++
++EFI_STATUS
++EFIAPI
+ _SPrint (
+   IN VOID     *Context,
+   IN CHAR16   *Buffer
+@@ -245,7 +277,7 @@ Returns:
+     spc->str[spc->maxlen] = 0;
+   }
+ 
+-  return 0;
++  return EFI_SUCCESS;
+ }
+ 
+ VOID
+@@ -253,13 +285,7 @@ _PoolCatPrint (
+   IN CHAR16               *fmt,
+   IN VA_LIST              args,
+   IN OUT POOL_PRINT       *spc,
+-  IN INTN
+-    (
+-  *Output)
+-    (
+-      VOID *context,
+-      CHAR16 *str
+-    )
++  IN GENERIC_OUTPUT_STRING Output
+   )
+ /*++'
+ 
+@@ -283,7 +309,7 @@ Returns:
+   ps.Output   = Output;
+   ps.Context  = spc;
+   ps.fmt.u.pw = fmt;
+-  ps.args     = args;
++  VA_COPY (ps.args, args);
+   _Print (&ps);
+ }
+ 
+@@ -616,8 +642,8 @@ Returns:
+ 
+   SetMem (&ps, sizeof (ps), 0);
+   ps.Context  = Out;
+-  ps.Output   = (INTN (*) (VOID *, CHAR16 *)) Out->OutputString;
+-  ps.SetAttr  = (INTN (*) (VOID *, UINTN)) Out->SetAttribute;
++  ps.Output   = GenericOutputStringCast (Out->OutputString);
++  ps.SetAttr  = GenericSetAttributeCast (Out->SetAttribute);
+   ASSERT (NULL != Out->Mode);
+   ps.Attr           = Out->Mode->Attribute;
+ 
+@@ -635,7 +661,7 @@ Returns:
+     ps.fmt.u.pc   = fmta;
+   }
+ 
+-  ps.args = args;
++  VA_COPY (ps.args, args);
+ 
+   if (Column != (UINTN) -1) {
+     Out->SetCursorPosition (Out, Column, Row);
+@@ -1365,7 +1391,8 @@ SetOutputPause (
+   BS->RestoreTPL (Tpl);
+ }
+ 
+-INTN
++EFI_STATUS
++EFIAPI
+ _PoolPrint (
+   IN VOID     *Context,
+   IN CHAR16   *Buffer
+@@ -1967,7 +1994,6 @@ Returns:
+ {
+   EFI_SIMPLE_TEXT_OUT_PROTOCOL  *DbgOut;
+   PRINT_STATE                   ps;
+-  VA_LIST                       args;
+   UINTN                         back;
+   UINTN                         attr;
+   UINTN                         SavedAttribute;
+@@ -1978,14 +2004,11 @@ Returns:
+     return 0;
+   }
+ 
+-  VA_START (args, fmt);
+   ZeroMem (&ps, sizeof (ps));
+ 
+-  ps.Output     = _DbgOut;
+   ps.fmt.Ascii  = TRUE;
+   ps.fmt.u.pc   = fmt;
+-  ps.args       = args;
+-  ps.Attr       = EFI_TEXT_ATTR (EFI_LIGHTGRAY, EFI_RED);
++  ps.Output     = _DbgOut;
+ 
+   DbgOut        = LibRuntimeDebugOut;
+ 
+@@ -1997,9 +2020,10 @@ Returns:
+   }
+ 
+   if (DbgOut) {
+-    ps.Attr     = DbgOut->Mode->Attribute;
+     ps.Context  = DbgOut;
+-    ps.SetAttr  = (INTN (*) (VOID *, UINTN)) DbgOut->SetAttribute;
++    ps.SetAttr  = GenericSetAttributeCast (DbgOut->SetAttribute);
++    ASSERT (NULL != DbgOut->Mode);
++    ps.Attr     = DbgOut->Mode->Attribute;
+   }
+ 
+   SavedAttribute    = ps.Attr;
+@@ -2026,6 +2050,8 @@ Returns:
+     ps.SetAttr (ps.Context, attr);
+   }
+ 
++  VA_START (ps.args, fmt);
++
+   _Print (&ps);
+ 
+   //
+@@ -2038,7 +2064,8 @@ Returns:
+   return 0;
+ }
+ 
+-INTN
++EFI_STATUS
++EFIAPI
+ _DbgOut (
+   IN VOID     *Context,
+   IN CHAR16   *Buffer
+@@ -2066,6 +2093,5 @@ Returns:
+     DbgOut->OutputString (DbgOut, Buffer);
+   }
+ 
+-  return 0;
++  return EFI_SUCCESS;
+ }
+-
+diff --git a/Library/Misc.c b/Library/Misc.c
+index 381f133..6e85be1 100644
+--- a/Library/Misc.c
++++ b/Library/Misc.c
+@@ -51,6 +51,10 @@ EFI_GUID        VtUtf8Protocol          = DEVICE_PATH_MESSAGING_VT_UTF8;
+ 
+ #define DEFAULT_FORM_BUFFER_SIZE  0xFFFF
+ 
++#define NULL2      ((VOID*) 1)
++
++#define ALIGN2(P)  ((VOID*) (((UINT8*) 0) + ((((UINT8*) (P)) - ((UINT8*) 0)) & -2)))
++
+ STATIC EFI_SHELL_ENVIRONMENT  *mShellEnv = NULL;
+ 
+ STATIC CHAR8  Hex[] = {
+@@ -236,44 +240,49 @@ Returns:
+ 
+ --*/
+ {
+-  BOOLEAN TryAgain;
+-
+   ASSERT (Status != NULL);
+   ASSERT (Buffer != NULL);
+ 
+   //
+   // If this is an initial request, buffer will be null with a new buffer size
+   //
+-  if (NULL == *Buffer && BufferSize) {
++  if (*Buffer == NULL) {
+     *Status = EFI_BUFFER_TOO_SMALL;
++    if (BufferSize == 0) {
++      // Avoid allocating zero-length buffer
++      *Buffer = NULL2;
++      return TRUE;
++    }
+   }
+-  //
+-  // If the status code is "buffer too small", resize the buffer
+-  //
+-  TryAgain = FALSE;
+-  if (*Status == EFI_BUFFER_TOO_SMALL) {
+ 
+-    if (*Buffer) {
++  if (EFI_ERROR (*Status)) {
++    if (ALIGN2 (*Buffer)) {
+       FreePool (*Buffer);
+     }
+ 
+-    *Buffer = AllocateZeroPool (BufferSize);
++    //
++    // If the status code is "buffer too small", resize the buffer
++    //
++    if (*Status == EFI_BUFFER_TOO_SMALL) {
++      *Buffer = AllocateZeroPool (BufferSize);
++      if (*Buffer) {
++        return TRUE;
++      }
+ 
+-    if (*Buffer) {
+-      TryAgain = TRUE;
+-    } else {
+       *Status = EFI_OUT_OF_RESOURCES;
++    } else {
++      *Buffer = NULL;
+     }
+-  }
+-  //
+-  // If there's an error, free the buffer
+-  //
+-  if (!TryAgain && EFI_ERROR (*Status) && *Buffer) {
+-    FreePool (*Buffer);
+-    *Buffer = NULL;
++  } else {
++    //
++    // Make sure that possible NULL2 is converted to NULL by aligning it using ALIGN2.
++    // Note that pointers returned by the AllocateZeroPool are 8 byte aligned which
++    // means that they survive ALIGN2 unmodified.
++    //
++    *Buffer = ALIGN2 (*Buffer);
+   }
+ 
+-  return TryAgain;
++  return FALSE;
+ }
+ 
+ INTN
+@@ -285,7 +294,7 @@ CompareGuid (
+ 
+ Routine Description:
+ 
+-  Compares to GUIDs
++  Compares two GUIDs
+ 
+ Arguments:
+ 
+@@ -1412,9 +1421,10 @@ QSort (
+     }
+   }
+ 
++  FreePool (Ele);
++
+   QSort (Buffer, Low, EleSize, Compare);
+   QSort ((UINT8 *) Buffer + (High + 1) * EleSize, EleNum - High - 1, EleSize, Compare);
+-  FreePool (Ele);
+ }
+ 
+ VOID
+diff --git a/LoadPciRom/LoadPciRom.c b/LoadPciRom/LoadPciRom.c
+index 99fd99d..db42b30 100644
+--- a/LoadPciRom/LoadPciRom.c
++++ b/LoadPciRom/LoadPciRom.c
+@@ -43,6 +43,7 @@ LoadPciRomConnectAllDriversToAllControllers (
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeLoadPciRom (
+   IN EFI_HANDLE        ImageHandle,
+   IN EFI_SYSTEM_TABLE  *SystemTable
+@@ -93,6 +94,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeLoadPciRom (
+   IN EFI_HANDLE        ImageHandle,
+   IN EFI_SYSTEM_TABLE  *SystemTable
+@@ -546,6 +548,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeLoadPciRomGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/SmbiosView/smbiosview.c b/SmbiosView/smbiosview.c
+index 79716d3..2ed1263 100644
+--- a/SmbiosView/smbiosview.c
++++ b/SmbiosView/smbiosview.c
+@@ -96,6 +96,7 @@ SHELL_VAR_CHECK_ITEM        SmbiosviewCheckList[] = {
+ // Entry Point
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeSmbiosViewApplication (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -106,6 +107,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeSmbiosViewApplication (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -769,6 +771,7 @@ GetShowTypeString (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeSmbiosViewApplicationGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/TelnetMgmt/TelnetMgmt.c b/TelnetMgmt/TelnetMgmt.c
+index 04088d1..f20700d 100644
+--- a/TelnetMgmt/TelnetMgmt.c
++++ b/TelnetMgmt/TelnetMgmt.c
+@@ -63,6 +63,7 @@ SHELL_VAR_CHECK_ITEM        TelnetmgmtCheckList[] = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeTelnetMgmt (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -78,6 +79,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeTelnetMgmt (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -227,6 +229,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeTelnetmgmtGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/comp/comp.c b/comp/comp.c
+index 888f53f..462591e 100644
+--- a/comp/comp.c
++++ b/comp/comp.c
+@@ -63,6 +63,7 @@ SHELL_VAR_CHECK_ITEM    CompCheckList[] = {
+ // Function declarations
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeComp (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -76,6 +77,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeComp (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -502,6 +504,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeCompGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/dblk/dblk.c b/dblk/dblk.c
+index 21c841e..324c857 100644
+--- a/dblk/dblk.c
++++ b/dblk/dblk.c
+@@ -58,6 +58,7 @@ SHELL_VAR_CHECK_ITEM      DblkCheckList[] = {
+ 
+ 
+ EFI_STATUS
++EFIAPI
+ DumpBlockDev (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -68,6 +69,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ DumpBlockDev (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -280,6 +282,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeDblkGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/devices/devices.c b/devices/devices.c
+index 1934ef5..349c923 100644
+--- a/devices/devices.c
++++ b/devices/devices.c
+@@ -66,6 +66,7 @@ SHELL_VAR_CHECK_ITEM    DevicesCheckList[] = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ DevicesMain (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -87,6 +88,7 @@ DevicesMainOld (
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ DevicesMain (
+   IN EFI_HANDLE               ImageHandle,
+   IN EFI_SYSTEM_TABLE         *SystemTable
+@@ -367,6 +369,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeDevicesGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/dmem/mem.c b/dmem/mem.c
+index 58fe982..a849e2d 100644
+--- a/dmem/mem.c
++++ b/dmem/mem.c
+@@ -24,6 +24,7 @@ Revision History
+ #include "MemCommonPart.h"
+ 
+ EFI_STATUS
++EFIAPI
+ DumpMem (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -34,6 +35,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ DumpMem (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -99,6 +101,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ DumpMemGetLineHelp (
+   OUT CHAR16          **Str
+   )
+diff --git a/dmpstore/dmpstore.c b/dmpstore/dmpstore.c
+index 3473d19..69c40dc 100644
+--- a/dmpstore/dmpstore.c
++++ b/dmpstore/dmpstore.c
+@@ -51,6 +51,7 @@ STATIC CHAR16   *AttrType[] = {
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeDumpStore (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -141,6 +142,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeDumpStore (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -781,6 +783,7 @@ SetFileVariable (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeDumpStoreGetLineHelp (
+   OUT CHAR16                **Str
+   )
+diff --git a/edit/libEditor.c b/edit/libEditor.c
+index 7f32ce1..b160246 100644
+--- a/edit/libEditor.c
++++ b/edit/libEditor.c
+@@ -77,14 +77,14 @@ EFI_EDITOR_GLOBAL_EDITOR      MainEditorConst = {
+ // Name:
+ //   MainEditorInit -- Init function for MainEditor
+ // In:
+-//   VOID
++//   FileName - The name of the file to edit
+ // Out:
+ //   EFI_SUCCESS
+ //   EFI_LOAD_ERROR
+ //
+ EFI_STATUS
+ MainEditorInit (
+-  VOID
++  CHAR16 *FileName
+   )
+ {
+   EFI_STATUS  Status;
+@@ -191,7 +191,7 @@ MainEditorInit (
+     return EFI_LOAD_ERROR;
+   }
+ 
+-  Status = FileBufferInit ();
++  Status = FileBufferInit (FileName);
+   if (EFI_ERROR (Status)) {
+     PrintToken (STRING_TOKEN (STR_EDIT_LIBEDITOR_FILEBUFFER), gEditHiiHandle);
+     return EFI_LOAD_ERROR;
+diff --git a/edit/libFileBuffer.c b/edit/libFileBuffer.c
+index c410ff3..995ae64 100644
+--- a/edit/libFileBuffer.c
++++ b/edit/libFileBuffer.c
+@@ -73,14 +73,14 @@ extern BOOLEAN          EditorMouseAction;
+ // Name:
+ //   FileBufferInit -- Initialization function for FileBuffer
+ // In:
+-//   VOID
++//   FileName - The file to load
+ // Out:
+ //   EFI_SUCCESS
+ //   EFI_LOAD_ERROR
+ //
+ EFI_STATUS
+ FileBufferInit (
+-  VOID
++  CHAR16 *FileName
+   )
+ {
+   //
+@@ -96,7 +96,7 @@ FileBufferInit (
+   //
+   // default set FileName to NewFile.txt
+   //
+-  FileBuffer.FileName = EditGetDefaultFileName ();
++  FileBuffer.FileName = FileName ? StrDuplicate (FileName) : EditGetDefaultFileName ();
+   if (FileBuffer.FileName == NULL) {
+     return EFI_LOAD_ERROR;
+   }
+@@ -592,9 +592,9 @@ FileBufferCreateLine (
+   Line->Type      = DEFAULT_TYPE;
+ 
+   //
+-  // initial buffer of the line is "\0"
++  // initial buffer of the line is ""
+   //
+-  Line->Buffer = PoolPrint (L"\0");
++  Line->Buffer = StrDuplicate (L"");
+   if (Line->Buffer == NULL) {
+     return NULL;
+   }
+@@ -625,27 +625,16 @@ FileBufferSetFileName (
+   IN CHAR16 *Str
+   )
+ {
+-  UINTN Size;
+-  UINTN Index;
+-
+   //
+   // free the old file name
+   //
+   EditorFreePool (FileBuffer.FileName);
+ 
+-  Size                = StrLen (Str);
+-
+-  FileBuffer.FileName = AllocatePool (2 * (Size + 1));
++  FileBuffer.FileName = StrDuplicate (Str);
+   if (FileBuffer.FileName == NULL) {
+     return EFI_OUT_OF_RESOURCES;
+   }
+ 
+-  for (Index = 0; Index < Size; Index++) {
+-    FileBuffer.FileName[Index] = Str[Index];
+-  }
+-
+-  FileBuffer.FileName[Size] = L'\0';
+-
+   return EFI_SUCCESS;
+ }
+ //
+@@ -1046,7 +1035,7 @@ Returns:
+ 
+     AsciiBuffer = Buffer;
+ 
+-    if (FileSize < 2) {
++    if (FileSize < sizeof (UINT16)) {
+       //
+       // size < Unicode file header, so only can be ASCII file
+       //
+@@ -1059,7 +1048,7 @@ Returns:
+         //
+         // Unicode file's size should be even
+         //
+-        if ((FileSize % 2) != 0) {
++        if ((FileSize % sizeof (CHAR16)) != 0) {
+           MainStatusBarSetStatusString (L"File Format Wrong");
+           EditorFreePool (Buffer);
+           ShellFreeFileList (&DirList);
+@@ -1067,7 +1056,7 @@ Returns:
+           return EFI_LOAD_ERROR;
+         }
+ 
+-        FileSize /= 2;
++        FileSize /= sizeof (CHAR16);
+ 
+         FileBuffer.FileType = UNICODE_FILE;
+         UnicodeBuffer       = Buffer;
+@@ -1085,7 +1074,7 @@ Returns:
+       //
+     }
+     //
+-    // end of FileSize < 2
++    // end of FileSize < sizeof (UINT16)
+     // all the check ends
+     // so now begin to set file name, free lines
+     //
+@@ -1198,7 +1187,7 @@ Returns:
+       // Unicode and one '\0'
+       //
+       EditorFreePool (Line->Buffer);
+-      Line->Buffer = AllocateZeroPool (LineSize * 2 + 2);
++      Line->Buffer = AllocateZeroPool ((LineSize + 1) * sizeof (CHAR16));
+ 
+       if (Line->Buffer == NULL) {
+         RemoveEntryList (&Line->Link);
+@@ -1422,10 +1411,10 @@ GetNewLine (
+     if (MainEditor.FileBuffer->FileType == UNICODE_FILE) {
+       Buffer[0]   = 0x0d;
+       Buffer[1]   = 0;
+-      NewLineSize = 2;
++      NewLineSize = sizeof (CHAR16);
+     } else {
+       Buffer[0]   = 0x0d;
+-      NewLineSize = 1;
++      NewLineSize = sizeof (CHAR8);
+     }
+ 
+     *Size = NewLineSize;
+@@ -1438,10 +1427,10 @@ GetNewLine (
+     if (MainEditor.FileBuffer->FileType == UNICODE_FILE) {
+       Buffer[0]   = 0x0a;
+       Buffer[1]   = 0;
+-      NewLineSize = 2;
++      NewLineSize = sizeof (CHAR16);
+     } else {
+       Buffer[0]   = 0x0a;
+-      NewLineSize = 1;
++      NewLineSize = sizeof (CHAR8);
+     }
+ 
+     *Size = NewLineSize;
+@@ -1457,11 +1446,11 @@ GetNewLine (
+       Buffer[2]   = 0x0a;
+       Buffer[3]   = 0;
+ 
+-      NewLineSize = 4;
++      NewLineSize = 2 * sizeof (CHAR16);
+     } else {
+       Buffer[0]   = 0x0d;
+       Buffer[1]   = 0x0a;
+-      NewLineSize = 2;
++      NewLineSize = 2 * sizeof (CHAR8);
+     }
+ 
+     *Size = NewLineSize;
+@@ -1477,11 +1466,11 @@ GetNewLine (
+       Buffer[2]   = 0x0d;
+       Buffer[3]   = 0;
+ 
+-      NewLineSize = 4;
++      NewLineSize = 2 * sizeof (CHAR16);
+     } else {
+       Buffer[0]   = 0x0a;
+       Buffer[1]   = 0x0d;
+-      NewLineSize = 2;
++      NewLineSize = 2 * sizeof (CHAR8);
+     }
+ 
+     *Size = NewLineSize;
+@@ -1489,6 +1478,7 @@ GetNewLine (
+   }
+ 
+ }
++#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+ //
+ // Name:
+ //   FileBufferSave -- Save lines in FileBuffer to disk
+@@ -1753,7 +1743,7 @@ FileBufferSave (
+       if (FileBuffer.FileType == ASCII_FILE) {
+         Length += Line->Size;
+       } else {
+-        Length += (Line->Size * 2);
++        Length += (Line->Size * sizeof (CHAR16));
+       }
+       //
+       // end if ASCII_FILE
+@@ -1784,7 +1774,7 @@ FileBufferSave (
+         UnicodeToAscii (Line->Buffer, Line->Size, Ptr);
+         Length = Line->Size;
+       } else {
+-        Length = (Line->Size * 2);
++        Length = (Line->Size * sizeof (CHAR16));
+         CopyMem (Ptr, (CHAR8 *) Line->Buffer, Length);
+       }
+       //
+@@ -1860,6 +1850,7 @@ FileBufferSave (
+ 
+   return EFI_SUCCESS;
+ }
++#pragma GCC diagnostic pop
+ //
+ // Name:
+ //   FileBufferHandleInput -- Dispatch input to different handler
+@@ -2689,8 +2680,6 @@ FileBufferDoReturn (
+   EFI_EDITOR_LINE *Line;
+   EFI_EDITOR_LINE *NewLine;
+   UINTN           FileColumn;
+-  UINTN           Index;
+-  CHAR16          *Buffer;
+   UINTN           Row;
+   UINTN           Col;
+ 
+@@ -2709,8 +2698,9 @@ FileBufferDoReturn (
+   NewLine->Signature  = EFI_EDITOR_LINE_LIST;
+   NewLine->Size       = Line->Size - FileColumn + 1;
+   NewLine->TotalSize  = NewLine->Size;
+-  NewLine->Buffer     = PoolPrint (L"\0");
++  NewLine->Buffer     = StrDuplicate(Line->Buffer + FileColumn - 1);
+   if (NewLine->Buffer == NULL) {
++    FreePool (NewLine);
+     return EFI_OUT_OF_RESOURCES;
+   }
+ 
+@@ -2718,28 +2708,12 @@ FileBufferDoReturn (
+ 
+   if (NewLine->Size > 0) {
+     //
+-    // UNICODE + '\0'
++    // cut short the current line
+     //
+-    Buffer = AllocatePool (2 * (NewLine->Size + 1));
+-    if (Buffer == NULL) {
+-      FreePool (NewLine->Buffer);
+-      FreePool (NewLine);
+-      return EFI_OUT_OF_RESOURCES;
+-    }
+-
+-    FreePool (NewLine->Buffer);
+-
+-    NewLine->Buffer = Buffer;
+-
+-    for (Index = 0; Index < NewLine->Size; Index++) {
+-      NewLine->Buffer[Index] = Line->Buffer[Index + FileColumn - 1];
+-    }
+-
+-    NewLine->Buffer[NewLine->Size]  = L'\0';
+-
+     Line->Buffer[FileColumn - 1]    = L'\0';
+     Line->Size                      = FileColumn - 1;
+   }
++
+   //
+   // increase NumLines
+   //
+@@ -2956,7 +2930,7 @@ FileBufferCutLine (
+   //
+   // if is the last dummy line, SO CAN not cut
+   //
+-  if (StrCmp (Line->Buffer, L"\0") == 0 && Line->Link.Flink == FileBuffer.ListHead
++  if (*Line->Buffer == L'\0' && Line->Link.Flink == FileBuffer.ListHead
+   //
+   // last line
+   //
+@@ -3207,8 +3181,8 @@ FileBufferReplace (
+     if (FileBuffer.CurrentLine->TotalSize + 1 <= NewSize) {
+       FileBuffer.CurrentLine->Buffer = ReallocatePool (
+                                         FileBuffer.CurrentLine->Buffer,
+-                                        2 * OldSize,
+-                                        2 * NewSize
++                                        OldSize * sizeof (CHAR16),
++                                        NewSize * sizeof (CHAR16)
+                                         );
+       FileBuffer.CurrentLine->TotalSize = NewSize - 1;
+     }
+@@ -3406,8 +3380,8 @@ FileBufferReplaceAll (
+         if (Line->TotalSize + 1 <= NewSize) {
+           Line->Buffer = ReallocatePool (
+                           Line->Buffer,
+-                          2 * OldSize,
+-                          2 * NewSize
++                          OldSize * sizeof (CHAR16),
++                          NewSize * sizeof (CHAR16)
+                           );
+           Line->TotalSize = NewSize - 1;
+         }
+diff --git a/edit/libMisc.c b/edit/libMisc.c
+index 3428c6b..2e54f97 100644
+--- a/edit/libMisc.c
++++ b/edit/libMisc.c
+@@ -87,7 +87,7 @@ LineDup (
+   //
+   // set the line buffer
+   //
+-  Dest->Buffer = PoolPrint (L"%s\0", Src->Buffer);
++  Dest->Buffer = StrDuplicate (Src->Buffer);
+   if (Dest->Buffer == NULL) {
+     FreePool (Dest);
+     return NULL;
+@@ -345,10 +345,9 @@ Returns:
+ --*/
+ {
+   UINTN   Index;
+-  CHAR16  *s;
+   CHAR16  *Str;
+ 
+-  Index = (StrSize) * 2;
++  Index = StrSize * sizeof (CHAR16);
+ 
+   Str   = Line->Buffer;
+ 
+@@ -356,7 +355,7 @@ Returns:
+   // do not have free space
+   //
+   if (Line->TotalSize <= Line->Size) {
+-    Str = ReallocatePool (Str, Index, Index + 16);
++    Str = ReallocatePool (Str, Index, Index + 8 * sizeof (CHAR16));
+     if (Str == NULL) {
+       return 0;
+     }
+@@ -366,14 +365,13 @@ Returns:
+   //
+   // move the later part of the string one character right
+   //
+-  s = Str;
+   for (Index = StrSize; Index > Pos; Index--) {
+-    s[Index] = s[Index - 1];
++    Str[Index] = Str[Index - 1];
+   }
+   //
+   // insert char into it.
+   //
+-  s[Index]      = Char;
++  Str[Index]    = Char;
+ 
+   Line->Buffer  = Str;
+   Line->Size++;
+diff --git a/edit/libeditor.h b/edit/libeditor.h
+index 9c84059..ff7d86d 100644
+--- a/edit/libeditor.h
++++ b/edit/libeditor.h
+@@ -27,7 +27,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ 
+ EFI_STATUS
+ MainEditorInit (
+-  VOID
++  CHAR16 *
+   );
+ EFI_STATUS
+ MainEditorCleanup (
+diff --git a/edit/libfilebuffer.h b/edit/libfilebuffer.h
+index d2b519b..5ee3db6 100644
+--- a/edit/libfilebuffer.h
++++ b/edit/libfilebuffer.h
+@@ -24,7 +24,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ 
+ EFI_STATUS
+ FileBufferInit (
+-  VOID
++  CHAR16 *
+   );
+ EFI_STATUS
+ FileBufferCleanup (
+diff --git a/edit/main.c b/edit/main.c
+index a69a1bc..d78aa03 100644
+--- a/edit/main.c
++++ b/edit/main.c
+@@ -23,6 +23,7 @@ Abstract:
+ extern UINT8  STRING_ARRAY_NAME[];
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeEFIEditor (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -74,6 +75,7 @@ EFI_HANDLE        ImageHandleBackup;
+ //    EFI_SUCCESS
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeEFIEditor (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -191,7 +193,7 @@ Returns:
+     goto done;
+   }
+ 
+-  Status = MainEditorInit ();
++  Status = MainEditorInit (ChkPck.ValueCount ? ChkPck.VarList->VarStr : NULL);
+   if (EFI_ERROR (Status)) {
+     Out->ClearScreen (Out);
+     Out->EnableCursor (Out, TRUE);
+@@ -201,14 +203,6 @@ Returns:
+ 
+   MainEditorBackup ();
+ 
+-  //
+-  // if editor launched with file named
+-  //
+-  if (ChkPck.ValueCount == 1) {
+-
+-    FileBufferSetFileName (ChkPck.VarList->VarStr);
+-  }
+-
+   Status = FileBufferRead (&MainEditor.FileBuffer->FileName, FALSE);
+   if (!EFI_ERROR (Status)) {
+     MainEditorRefresh ();
+@@ -268,6 +262,7 @@ done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeEFIEditorGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/err/err.c b/err/err.c
+index 6062ddb..a9da253 100644
+--- a/err/err.c
++++ b/err/err.c
+@@ -65,6 +65,7 @@ SHELL_VAR_CHECK_ITEM    ErrCheckList[] = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeError (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -350,6 +351,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeError (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -615,6 +617,7 @@ Returns:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeErrorGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/guid/guid.c b/guid/guid.c
+index 78ec5eb..bbe992b 100644
+--- a/guid/guid.c
++++ b/guid/guid.c
+@@ -66,6 +66,7 @@ EFI_BOOTSHELL_CODE (
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ GuidMain (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -75,6 +76,7 @@ GuidMain (
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ GuidMain (
+   IN EFI_HANDLE               ImageHandle,
+   IN EFI_SYSTEM_TABLE         *SystemTable
+@@ -236,6 +238,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ GuidMainGetLineHelp (
+   OUT CHAR16          **Str
+   )
+diff --git a/hexedit/libMemImage.c b/hexedit/libMemImage.c
+index 2fed45b..5d9cf08 100644
+--- a/hexedit/libMemImage.c
++++ b/hexedit/libMemImage.c
+@@ -43,6 +43,7 @@ HEFI_EDITOR_MEM_IMAGE             HMemImageConst = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ DummyMemRead (
+   IN EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL              * This,
+   IN     EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL_WIDTH    Width,
+@@ -52,6 +53,7 @@ DummyMemRead (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ DummyMemWrite (
+   IN EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL              * This,
+   IN     EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL_WIDTH    Width,
+@@ -386,6 +388,7 @@ Returns:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ DummyMemRead (
+   IN EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL              * This,
+   IN     EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL_WIDTH    Width,
+@@ -398,6 +401,7 @@ DummyMemRead (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ DummyMemWrite (
+   IN EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL              * This,
+   IN     EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL_WIDTH    Width,
+diff --git a/hexedit/main.c b/hexedit/main.c
+index 43340d8..34ed062 100644
+--- a/hexedit/main.c
++++ b/hexedit/main.c
+@@ -74,6 +74,7 @@ SHELL_VAR_CHECK_ITEM    HexeditCheckList[] = {
+ EFI_HANDLE        HImageHandleBackup;
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeEFIHexEditor (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -101,6 +102,7 @@ PrintUsage (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeEFIHexEditor (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -486,6 +488,7 @@ done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeEFIHexEditorGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/mem/mm.c b/mem/mm.c
+index a5ebdc0..19f493d 100644
+--- a/mem/mm.c
++++ b/mem/mm.c
+@@ -26,6 +26,7 @@ Revision History
+ extern EFI_HII_HANDLE HiiMemHandle;
+ 
+ EFI_STATUS
++EFIAPI
+ DumpMm (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -36,6 +37,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ DumpMm (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -101,6 +103,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ DumpMmGetLineHelp (
+   OUT CHAR16          **Str
+   )
+diff --git a/memmap/memmap.c b/memmap/memmap.c
+index 24da6e2..249f445 100644
+--- a/memmap/memmap.c
++++ b/memmap/memmap.c
+@@ -62,6 +62,7 @@ SHELL_VAR_CHECK_ITEM    MemmapCheckList[] = {
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeMemmap (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -80,6 +81,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeMemmap (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -303,6 +305,7 @@ IsRealMemory (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeMemmapGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/mm/mm.c b/mm/mm.c
+index cb53465..ef04860 100644
+--- a/mm/mm.c
++++ b/mm/mm.c
+@@ -42,6 +42,7 @@ typedef enum {
+ } EFI_ACCESS_TYPE;
+ 
+ EFI_STATUS
++EFIAPI
+ DumpIoModify (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -162,6 +163,7 @@ GetPciEAddressFromInputAddress (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ DumpIoModify (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -913,6 +915,7 @@ Returns:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeMMGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/mode/mode.c b/mode/mode.c
+index e49df84..850ce5d 100644
+--- a/mode/mode.c
++++ b/mode/mode.c
+@@ -58,6 +58,7 @@ SHELL_VAR_CHECK_ITEM    ModeCheckList[] = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeMode (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -71,6 +72,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeMode (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -251,6 +253,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeModeGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/mount/mount.c b/mount/mount.c
+index 6825511..ee3ba9c 100644
+--- a/mount/mount.c
++++ b/mount/mount.c
+@@ -86,6 +86,7 @@ EFI_BOOTSHELL_CODE(
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ MountMain (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -95,6 +96,7 @@ MountMain (
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ MountMain (
+   IN EFI_HANDLE               ImageHandle,
+   IN EFI_SYSTEM_TABLE         *SystemTable
+@@ -317,6 +319,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ MountMainGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/newshell/FakeHii.c b/newshell/FakeHii.c
+index 5dff3ad..7cab8ea 100644
+--- a/newshell/FakeHii.c
++++ b/newshell/FakeHii.c
+@@ -1733,14 +1733,14 @@ FakeCompareLanguage (
+ 
+ VOID
+ FakeAsciiToUnicode (
+-  IN UINT8                                        *Lang,
+-  IN UINT16                                       *Language
++  IN CHAR8                              *Ascii,
++  IN CHAR16                             *Unicode
+   )
+ {
+   UINT8 Count;
+ 
+   for (Count = 0; Count < 3; Count++) {
+-    Language[Count] = (CHAR16) Lang[Count];
++    Unicode[Count] = (CHAR16) Ascii[Count];
+   }
+ }
+ 
+@@ -2244,6 +2244,7 @@ Returns:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiExportDatabase (
+   IN     EFI_HII_PROTOCOL *This,
+   IN     EFI_HII_HANDLE   Handle,
+@@ -2255,6 +2256,7 @@ FakeHiiExportDatabase (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetDefaultImage (
+   IN     EFI_HII_PROTOCOL           *This,
+   IN     EFI_HII_HANDLE             Handle,
+@@ -2266,6 +2268,7 @@ FakeHiiGetDefaultImage (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetGlyph (
+   IN     EFI_HII_PROTOCOL  *This,
+   IN     CHAR16            *Source,
+@@ -2279,6 +2282,7 @@ FakeHiiGetGlyph (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetKeyboardLayout (
+   IN     EFI_HII_PROTOCOL    * This,
+   OUT    UINT16              *DescriptorCount,
+@@ -2289,6 +2293,7 @@ FakeHiiGetKeyboardLayout (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetLine (
+   IN     EFI_HII_PROTOCOL  *This,
+   IN     EFI_HII_HANDLE    Handle,
+@@ -2304,6 +2309,7 @@ FakeHiiGetLine (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetSecondaryLanguages (
+   IN  EFI_HII_PROTOCOL    *This,
+   IN  EFI_HII_HANDLE      Handle,
+@@ -2315,6 +2321,7 @@ FakeHiiGetSecondaryLanguages (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGlyphToBlt (
+   IN     EFI_HII_PROTOCOL               *This,
+   IN     UINT8                          *GlyphBuffer,
+@@ -2330,6 +2337,7 @@ FakeHiiGlyphToBlt (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiNewString (
+   IN     EFI_HII_PROTOCOL      *This,
+   IN     CHAR16                *Language,
+@@ -2342,6 +2350,7 @@ FakeHiiNewString (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiResetStrings (
+   IN     EFI_HII_PROTOCOL   *This,
+   IN     EFI_HII_HANDLE     Handle
+@@ -2351,6 +2360,7 @@ FakeHiiResetStrings (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiTestString (
+   IN     EFI_HII_PROTOCOL  *This,
+   IN     CHAR16            *StringToTest,
+@@ -2362,6 +2372,7 @@ FakeHiiTestString (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiUpdateForm (
+   IN EFI_HII_PROTOCOL     *This,
+   IN EFI_HII_HANDLE       Handle,
+diff --git a/newshell/FakeHii.h b/newshell/FakeHii.h
+index a73332b..861db9c 100644
+--- a/newshell/FakeHii.h
++++ b/newshell/FakeHii.h
+@@ -379,6 +379,7 @@ FakeHiiGetForms (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiExportDatabase (
+   IN     EFI_HII_PROTOCOL *This,
+   IN     EFI_HII_HANDLE   Handle,
+@@ -387,6 +388,7 @@ FakeHiiExportDatabase (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetDefaultImage (
+   IN     EFI_HII_PROTOCOL           *This,
+   IN     EFI_HII_HANDLE             Handle,
+@@ -395,6 +397,7 @@ FakeHiiGetDefaultImage (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetGlyph (
+   IN     EFI_HII_PROTOCOL  *This,
+   IN     CHAR16            *Source,
+@@ -405,6 +408,7 @@ FakeHiiGetGlyph (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetKeyboardLayout (
+   IN     EFI_HII_PROTOCOL    * This,
+   OUT    UINT16              *DescriptorCount,
+@@ -412,6 +416,7 @@ FakeHiiGetKeyboardLayout (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetLine (
+   IN     EFI_HII_PROTOCOL  *This,
+   IN     EFI_HII_HANDLE    Handle,
+@@ -424,6 +429,7 @@ FakeHiiGetLine (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGetSecondaryLanguages (
+   IN  EFI_HII_PROTOCOL    *This,
+   IN  EFI_HII_HANDLE      Handle,
+@@ -432,6 +438,7 @@ FakeHiiGetSecondaryLanguages (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiGlyphToBlt (
+   IN     EFI_HII_PROTOCOL               *This,
+   IN     UINT8                          *GlyphBuffer,
+@@ -444,6 +451,7 @@ FakeHiiGlyphToBlt (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiNewString (
+   IN     EFI_HII_PROTOCOL      *This,
+   IN     CHAR16                *Language,
+@@ -453,12 +461,14 @@ FakeHiiNewString (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiResetStrings (
+   IN     EFI_HII_PROTOCOL   *This,
+   IN     EFI_HII_HANDLE     Handle
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiTestString (
+   IN     EFI_HII_PROTOCOL  *This,
+   IN     CHAR16            *StringToTest,
+@@ -467,6 +477,7 @@ FakeHiiTestString (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ FakeHiiUpdateForm (
+   IN EFI_HII_PROTOCOL     *This,
+   IN EFI_HII_HANDLE       Handle,
+diff --git a/openinfo/openinfo.c b/openinfo/openinfo.c
+index 16274fe..5a01d17 100644
+--- a/openinfo/openinfo.c
++++ b/openinfo/openinfo.c
+@@ -103,6 +103,7 @@ EFI_BOOTSHELL_CODE(
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ OpeninfoMain (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -112,6 +113,7 @@ OpeninfoMain (
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ OpeninfoMain (
+   IN EFI_HANDLE               ImageHandle,
+   IN EFI_SYSTEM_TABLE         *SystemTable
+@@ -365,6 +367,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeOpenInfoGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/pci/pci.c b/pci/pci.c
+index bb587c9..0804cb4 100644
+--- a/pci/pci.c
++++ b/pci/pci.c
+@@ -36,6 +36,7 @@ extern UINT8      STRING_ARRAY_NAME[];
+ #include EFI_PROTOCOL_DEFINITION (PciRootBridgeIo)
+ 
+ EFI_STATUS
++EFIAPI
+ PciDump (
+   IN EFI_HANDLE                             ImageHandle,
+   IN EFI_SYSTEM_TABLE                       *SystemTable
+@@ -441,6 +442,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ PciDump (
+   IN EFI_HANDLE                             ImageHandle,
+   IN EFI_SYSTEM_TABLE                       *SystemTable
+@@ -3175,6 +3177,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializePciGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/sermode/sermode.c b/sermode/sermode.c
+index d03c621..109df35 100644
+--- a/sermode/sermode.c
++++ b/sermode/sermode.c
+@@ -62,6 +62,7 @@ SHELL_VAR_CHECK_ITEM    SermodeCheckList[] = {
+ //
+ //
+ EFI_STATUS
++EFIAPI
+ InitializeSerialMode (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -202,6 +203,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeSerialMode (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+@@ -491,6 +493,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeSerialModeGetLineHelp (
+   OUT CHAR16              **Str
+   )
+diff --git a/shellenv/ConsoleProxy.c b/shellenv/ConsoleProxy.c
+index 0978251..abde04c 100644
+--- a/shellenv/ConsoleProxy.c
++++ b/shellenv/ConsoleProxy.c
+@@ -1495,9 +1495,8 @@ ProxyConInFlashState (
+                   TimerRelative,
+                   (UINT64) 20000000
+                   );
+-    mConInProxy.InputState = INPUT_STATE_ESC;
+   } else {
+-    Status = EFI_UNSUPPORTED;
++    Status = EFI_SUCCESS;
+   }
+ 
+   return Status;
+diff --git a/shellenv/cmddisp.c b/shellenv/cmddisp.c
+index 94d64c8..33df95f 100644
+--- a/shellenv/cmddisp.c
++++ b/shellenv/cmddisp.c
+@@ -269,12 +269,14 @@ InitializeUnload (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ GuidMain (
+   IN EFI_HANDLE               ImageHandle,
+   IN EFI_SYSTEM_TABLE         *SystemTable
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ OpeninfoMain (
+   IN EFI_HANDLE         ImageHandle,
+   IN EFI_SYSTEM_TABLE   *SystemTable
+diff --git a/shellenv/echo.c b/shellenv/echo.c
+index 9cf3482..de48bf4 100644
+--- a/shellenv/echo.c
++++ b/shellenv/echo.c
+@@ -57,6 +57,7 @@ SHELL_VAR_CHECK_ITEM    EchoCheckList[] = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ SEnvCmdEcho (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+diff --git a/shellenv/shelle.h b/shellenv/shelle.h
+index 4338a21..80f3f7c 100644
+--- a/shellenv/shelle.h
++++ b/shellenv/shelle.h
+@@ -299,6 +299,7 @@ SEnvInitProtocolInfo (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ SEnvLoadDefaultsGetLineHelp (
+   IN OUT CHAR16                     **Str
+   )
+@@ -492,6 +493,7 @@ SEnvIGetProtID (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ SEnvCmdUnloadGetLineHelp (
+   OUT CHAR16                   **Str
+   )
+@@ -1668,6 +1670,7 @@ EFIStructsPrint (
+   );
+ 
+ EFI_STATUS
++EFIAPI
+ DumpBlockDev (
+   IN EFI_HANDLE               ImageHandle,
+   IN EFI_SYSTEM_TABLE         *SystemTable
+diff --git a/stall/stall.c b/stall/stall.c
+index b05c3a9..cc547be 100644
+--- a/stall/stall.c
++++ b/stall/stall.c
+@@ -55,6 +55,7 @@ SHELL_VAR_CHECK_ITEM    StallCheckList[] = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeStall (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -65,6 +66,7 @@ EFI_BOOTSHELL_CODE(
+ )
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeStall (
+   IN EFI_HANDLE           ImageHandle,
+   IN EFI_SYSTEM_TABLE     *SystemTable
+@@ -236,6 +238,7 @@ Done:
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeStallGetLineHelp (
+   OUT CHAR16            **Str
+   )
+diff --git a/time/TimeStrings.uni b/time/TimeStrings.uni
+index f5c4644..712e144 100644
+--- a/time/TimeStrings.uni
++++ b/time/TimeStrings.uni
+@@ -25,7 +25,9 @@
+   
+  # l a n g d e f       e n g   " E n g l i s h "  
+   
+- # s t r i n g   S T R _ T I M E _ T H R E E _ V A R S                         # l a n g u a g e   e n g     " % 0 2 d : % 0 2 d : % 0 2 d   ( G M T % h c % 0 2 d : % 0 2 d ) \ n "  
++ # s t r i n g   S T R _ T I M E _ T H R E E _ V A R S                         # l a n g u a g e   e n g     " % 0 2 d : % 0 2 d : % 0 2 d \ n "  
++  
++ # s t r i n g   S T R _ T I M E _ T H R E E _ V A R S _ A N D _ T Z           # l a n g u a g e   e n g     " % 0 2 d : % 0 2 d : % 0 2 d   ( G M T % h c % 0 2 d : % 0 2 d ) \ n "  
+   
+  # s t r i n g   S T R _ T I M E _ C L O C K _ N O T _ F U N C                 # l a n g u a g e   e n g     " % h s :   C l o c k   n o t   f u n c t i o n a l \ n "  
+   
+diff --git a/time/time.c b/time/time.c
+index 6309963..a6bc2f3 100644
+--- a/time/time.c
++++ b/time/time.c
+@@ -185,8 +185,21 @@ Returns:
+ 
+   if (ChkPck.ValueCount == 0) {
+     Status = RT->GetTime (&Time, NULL);
++    if (EFI_ERROR (Status)) {
++      PrintToken (STRING_TOKEN (STR_TIME_CLOCK_NOT_FUNC), HiiHandle, L"time");
++      goto Done;
++    }
+ 
+-    if (!EFI_ERROR (Status)) {
++    Status = EFI_SUCCESS;
++    if (Time.TimeZone == EFI_UNSPECIFIED_TIMEZONE) {
++      PrintToken (
++        STRING_TOKEN (STR_TIME_THREE_VARS),
++        HiiHandle,
++        (UINTN) Time.Hour,
++        (UINTN) Time.Minute,
++        (UINTN) Time.Second
++        );
++    } else {
+       if (Time.TimeZone < 0) {
+         nValue  = -Time.TimeZone;
+       } else {
+@@ -195,7 +208,7 @@ Returns:
+       }
+ 
+       PrintToken (
+-        STRING_TOKEN (STR_TIME_THREE_VARS),
++        STRING_TOKEN (STR_TIME_THREE_VARS_AND_TZ),
+         HiiHandle,
+         (UINTN) Time.Hour,
+         (UINTN) Time.Minute,
+@@ -204,11 +217,8 @@ Returns:
+         nValue / 60,
+         nValue % 60
+         );
+-      Status = EFI_SUCCESS;
+-      goto Done;
+     }
+     
+-    PrintToken (STRING_TOKEN (STR_TIME_CLOCK_NOT_FUNC), HiiHandle, L"time");
+     goto Done;
+   }
+   //
+diff --git a/tzone/TZoneStrings.uni b/tzone/TZoneStrings.uni
+index b019b85..0eb033e 100644
+--- a/tzone/TZoneStrings.uni
++++ b/tzone/TZoneStrings.uni
+@@ -95,6 +95,8 @@
+   
+  # s t r i n g   S T R _ T Z O N E _ G M T _ P 7 8 0                         # l a n g u a g e   e n g     " G M T + 1 3 : 0 0 ,   N u k u ' a l o f a \ n "  
+   
++ # s t r i n g   S T R _ T Z O N E _ U N S P E C I F I E D                   # l a n g u a g e   e n g     " U n s p e c i f i e d   t i m e z o n e \ n "  
++  
+  # s t r i n g   S T R _ H E L P I N F O _ T Z O N E _ S Y N T A X             # l a n g u a g e   e n g     " T I M E Z O N E   [ - s   h h : m m   |   - l ]   [ - b ]   [ - f ] \ n "  
+   
+  # s t r i n g   S T R _ G E T _ T I M E _ E R R O R                           # l a n g u a g e   e n g     " G e t T i m e   i n f o   r e t u r n   E r r o r \ n "  
+diff --git a/tzone/tzone.c b/tzone/tzone.c
+index 2b6ccdd..5dbf510 100644
+--- a/tzone/tzone.c
++++ b/tzone/tzone.c
+@@ -75,6 +75,7 @@ struct tagMap {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeTZone (
+   IN EFI_HANDLE        hImageHandle,
+   IN EFI_SYSTEM_TABLE  *pSystemTable
+@@ -236,6 +237,7 @@ struct tagMap gTZMap[] = {
+ };
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeTZone (
+   IN EFI_HANDLE               hImageHandle,
+   IN EFI_SYSTEM_TABLE         *pSystemTable
+@@ -400,6 +402,10 @@ InitializeTZone (
+     //
+     // end of if (EFI_ERROR(Status))
+     //
++    if (nValue == EFI_UNSPECIFIED_TIMEZONE) {
++      PrintToken (STRING_TOKEN (STR_TZONE_UNSPECIFIED), hHiiHandle);
++      goto Done;
++    }
+     if (bFullInfo) {
+       for (uIndex = 0; uIndex < sizeof (gTZMap) / sizeof (struct tagMap); uIndex++) {
+         if (gTZMap[uIndex].m_nValue == nValue) {
+@@ -559,6 +565,7 @@ TZoneList (
+ }
+ 
+ EFI_STATUS
++EFIAPI
+ InitializeZoneGetLineHelp (
+   OUT CHAR16              **Str
+   )
