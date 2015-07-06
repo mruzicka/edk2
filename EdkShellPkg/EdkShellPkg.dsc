@@ -28,9 +28,9 @@
 # Change the macro to the directory containing the source code from EDK Shell Project.  
 # This is a workspace relative directory
 #
-# DEFINE EDK_SHELL_DIR           = EdkShellPkg/Shell  # when "Shell" directory is under $(WORKSPACE)/EdkShellPkg 
+DEFINE EDK_SHELL_DIR           = EdkShellPkg/Shell  # when "Shell" directory is under $(WORKSPACE)/EdkShellPkg 
 #
-DEFINE EDK_SHELL_DIR             = Shell  # when "Shell" directory is directly under $(WORKSPACE) 
+# DEFINE EDK_SHELL_DIR             = Shell  # when "Shell" directory is directly under $(WORKSPACE) 
 
 DEFINE MSFT_MACRO                = /D EFI_SPECIFICATION_VERSION=0x0002000A /D PI_SPECIFICATION_VERSION=0x00009000 /D TIANO_RELEASE_VERSION=0x00080006 /D PCD_EDKII_GLUE_PciExpressBaseAddress=0xE0000000 /D EFI_DEBUG
 DEFINE INTEL_MACRO               = /D EFI_SPECIFICATION_VERSION=0x0002000A /D PI_SPECIFICATION_VERSION=0x00009000 /D TIANO_RELEASE_VERSION=0x00080006 /D PCD_EDKII_GLUE_PciExpressBaseAddress=0xE0000000 /D EFI_DEBUG
@@ -110,21 +110,21 @@ DEFINE GCC_MACRO                 = -DEFI_SPECIFICATION_VERSION=0x0002000A -DPI_S
 ###################################################################################################
 
 [Components]
-  $(EDK_SHELL_DIR)/Shell.inf {
-    <BuildOptions>
-      #
-      # Can not do this in nmake section of edk INF
-      #
-      GCC:*_*_*_CC_FLAGS     = -DEFI_MONOSHELL 
-      GCC:*_*_*_VFRPP_FLAGS  = -DEFI_MONOSHELL 
-      GCC:*_*_*_APP_FLAGS    = -DEFI_MONOSHELL 
-      GCC:*_*_*_PP_FLAGS     = -DEFI_MONOSHELL 
-
-      RVCT:*_*_ARM_CC_FLAGS     = -DEFI_MONOSHELL 
-      RVCT:*_*_ARM_VFRPP_FLAGS  = -DEFI_MONOSHELL
-      RVCT:*_*_ARM_APP_FLAGS    = -DEFI_MONOSHELL 
-      RVCT:*_*_ARM_PP_FLAGS     = -DEFI_MONOSHELL 
-  }
+#  $(EDK_SHELL_DIR)/Shell.inf {
+#    <BuildOptions>
+#      #
+#      # Can not do this in nmake section of edk INF
+#      #
+#      GCC:*_*_*_CC_FLAGS     = -DEFI_MONOSHELL 
+#      GCC:*_*_*_VFRPP_FLAGS  = -DEFI_MONOSHELL 
+#      GCC:*_*_*_APP_FLAGS    = -DEFI_MONOSHELL 
+#      GCC:*_*_*_PP_FLAGS     = -DEFI_MONOSHELL 
+#
+#      RVCT:*_*_ARM_CC_FLAGS     = -DEFI_MONOSHELL 
+#      RVCT:*_*_ARM_VFRPP_FLAGS  = -DEFI_MONOSHELL
+#      RVCT:*_*_ARM_APP_FLAGS    = -DEFI_MONOSHELL 
+#      RVCT:*_*_ARM_PP_FLAGS     = -DEFI_MONOSHELL 
+#  }
   
   $(EDK_SHELL_DIR)/ShellFull.inf {
     <BuildOptions>
@@ -139,54 +139,54 @@ DEFINE GCC_MACRO                 = -DEFI_SPECIFICATION_VERSION=0x0002000A -DPI_S
       RVCT:*_*_ARM_PP_FLAGS     = -DEFI_MONOSHELL -DEFI_FULLSHELL
   }
   
-  $(EDK_SHELL_DIR)/attrib/attrib.inf
-  $(EDK_SHELL_DIR)/cls/cls.inf
-  $(EDK_SHELL_DIR)/comp/comp.inf
-  $(EDK_SHELL_DIR)/cp/cp.inf
-  $(EDK_SHELL_DIR)/date/date.inf
-  $(EDK_SHELL_DIR)/dblk/dblk.inf
-  $(EDK_SHELL_DIR)/devices/devices.inf
-  $(EDK_SHELL_DIR)/DeviceTree/devicetree.inf
-  $(EDK_SHELL_DIR)/dmem/dmem.inf
-  $(EDK_SHELL_DIR)/dmpstore/dmpstore.inf
-  $(EDK_SHELL_DIR)/drivers/drivers.inf
-  $(EDK_SHELL_DIR)/drvcfg/drvcfg.inf
-  $(EDK_SHELL_DIR)/drvdiag/drvdiag.inf
-  $(EDK_SHELL_DIR)/edit/edit.inf
-  $(EDK_SHELL_DIR)/EfiCompress/compress.inf
-  $(EDK_SHELL_DIR)/EfiDecompress/Decompress.inf
-  $(EDK_SHELL_DIR)/err/err.inf
-  $(EDK_SHELL_DIR)/guid/guid.inf
-  $(EDK_SHELL_DIR)/hexedit/hexedit.inf
-  $(EDK_SHELL_DIR)/IfConfig/IfConfig.inf
-  $(EDK_SHELL_DIR)/IpConfig/IpConfig.inf
-  $(EDK_SHELL_DIR)/load/load.inf
-  $(EDK_SHELL_DIR)/LoadPciRom/LoadPciRom.inf
-  $(EDK_SHELL_DIR)/ls/ls.inf
-  $(EDK_SHELL_DIR)/mem/mem.inf
-  $(EDK_SHELL_DIR)/memmap/memmap.inf
-  $(EDK_SHELL_DIR)/mkdir/mkdir.inf
-  $(EDK_SHELL_DIR)/mm/mm.inf
-  $(EDK_SHELL_DIR)/mode/mode.inf
-  $(EDK_SHELL_DIR)/mount/mount.inf
-  $(EDK_SHELL_DIR)/mv/mv.inf
-  $(EDK_SHELL_DIR)/newshell/nshell.inf
-  $(EDK_SHELL_DIR)/openinfo/openinfo.inf
-  $(EDK_SHELL_DIR)/pci/pci.inf
-  $(EDK_SHELL_DIR)/Ping/Ping.inf
-  $(EDK_SHELL_DIR)/reset/reset.inf
-  $(EDK_SHELL_DIR)/rm/rm.inf
-  $(EDK_SHELL_DIR)/sermode/sermode.inf
-  $(EDK_SHELL_DIR)/SmbiosView/Smbiosview.inf
-  $(EDK_SHELL_DIR)/stall/stall.inf
-  $(EDK_SHELL_DIR)/TelnetMgmt/TelnetMgmt.inf
-  $(EDK_SHELL_DIR)/time/time.inf
-  $(EDK_SHELL_DIR)/touch/touch.inf
-  $(EDK_SHELL_DIR)/type/type.inf
-  $(EDK_SHELL_DIR)/tzone/timezone.inf
-  $(EDK_SHELL_DIR)/unload/unload.inf
-  $(EDK_SHELL_DIR)/ver/Ver.inf
-  $(EDK_SHELL_DIR)/vol/Vol.inf
+#  $(EDK_SHELL_DIR)/attrib/attrib.inf
+#  $(EDK_SHELL_DIR)/cls/cls.inf
+#  $(EDK_SHELL_DIR)/comp/comp.inf
+#  $(EDK_SHELL_DIR)/cp/cp.inf
+#  $(EDK_SHELL_DIR)/date/date.inf
+#  $(EDK_SHELL_DIR)/dblk/dblk.inf
+#  $(EDK_SHELL_DIR)/devices/devices.inf
+#  $(EDK_SHELL_DIR)/DeviceTree/devicetree.inf
+#  $(EDK_SHELL_DIR)/dmem/dmem.inf
+#  $(EDK_SHELL_DIR)/dmpstore/dmpstore.inf
+#  $(EDK_SHELL_DIR)/drivers/drivers.inf
+#  $(EDK_SHELL_DIR)/drvcfg/drvcfg.inf
+#  $(EDK_SHELL_DIR)/drvdiag/drvdiag.inf
+#  $(EDK_SHELL_DIR)/edit/edit.inf
+#  $(EDK_SHELL_DIR)/EfiCompress/compress.inf
+#  $(EDK_SHELL_DIR)/EfiDecompress/Decompress.inf
+#  $(EDK_SHELL_DIR)/err/err.inf
+#  $(EDK_SHELL_DIR)/guid/guid.inf
+#  $(EDK_SHELL_DIR)/hexedit/hexedit.inf
+#  $(EDK_SHELL_DIR)/IfConfig/IfConfig.inf
+#  $(EDK_SHELL_DIR)/IpConfig/IpConfig.inf
+#  $(EDK_SHELL_DIR)/load/load.inf
+#  $(EDK_SHELL_DIR)/LoadPciRom/LoadPciRom.inf
+#  $(EDK_SHELL_DIR)/ls/ls.inf
+#  $(EDK_SHELL_DIR)/mem/mem.inf
+#  $(EDK_SHELL_DIR)/memmap/memmap.inf
+#  $(EDK_SHELL_DIR)/mkdir/mkdir.inf
+#  $(EDK_SHELL_DIR)/mm/mm.inf
+#  $(EDK_SHELL_DIR)/mode/mode.inf
+#  $(EDK_SHELL_DIR)/mount/mount.inf
+#  $(EDK_SHELL_DIR)/mv/mv.inf
+#  $(EDK_SHELL_DIR)/newshell/nshell.inf
+#  $(EDK_SHELL_DIR)/openinfo/openinfo.inf
+#  $(EDK_SHELL_DIR)/pci/pci.inf
+#  $(EDK_SHELL_DIR)/Ping/Ping.inf
+#  $(EDK_SHELL_DIR)/reset/reset.inf
+#  $(EDK_SHELL_DIR)/rm/rm.inf
+#  $(EDK_SHELL_DIR)/sermode/sermode.inf
+#  $(EDK_SHELL_DIR)/SmbiosView/Smbiosview.inf
+#  $(EDK_SHELL_DIR)/stall/stall.inf
+#  $(EDK_SHELL_DIR)/TelnetMgmt/TelnetMgmt.inf
+#  $(EDK_SHELL_DIR)/time/time.inf
+#  $(EDK_SHELL_DIR)/touch/touch.inf
+#  $(EDK_SHELL_DIR)/type/type.inf
+#  $(EDK_SHELL_DIR)/tzone/timezone.inf
+#  $(EDK_SHELL_DIR)/unload/unload.inf
+#  $(EDK_SHELL_DIR)/ver/Ver.inf
+#  $(EDK_SHELL_DIR)/vol/Vol.inf
 
 [BuildOptions.Common.EDK]
   MSFT:*_*_IA32_CC_FLAGS    = /D EFI_SPECIFICATION_VERSION=0x0002000A /D PI_SPECIFICATION_VERSION=0x00010000 /D TIANO_RELEASE_VERSION=0x00080006 /D EFI32
