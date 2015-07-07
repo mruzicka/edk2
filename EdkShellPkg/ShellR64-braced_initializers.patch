@@ -1,0 +1,2567 @@
+ DeviceTree/devicetree.h    |   2 +-
+ EfiCompress/Compress.h     |   2 +-
+ EfiDecompress/Decompress.h |   2 +-
+ IfConfig/IfConfig.h        |   2 +-
+ IpConfig/IpConfig.h        |   2 +-
+ Library/ConsistMapping.c   |  84 ++++----
+ Library/DPath.c            | 144 +++++++-------
+ Library/Data.c             |   8 +-
+ Library/Misc.c             |   6 +-
+ LoadPciRom/LoadPciRom.h    |   2 +-
+ Ping/Ping.h                |   2 +-
+ SmbiosView/Smbios.h        |   2 +-
+ TelnetMgmt/TelnetMgmt.h    |   2 +-
+ TelnetMgmt/TelnetServer.h  |   2 +-
+ attrib/attrib.h            |   2 +-
+ bcfg/bcfg.h                |   2 +-
+ cls/cls.h                  |   5 +-
+ comp/comp.h                |   2 +-
+ cp/cp.h                    |   2 +-
+ date/date.h                |   2 +-
+ dblk/dblk.h                |   2 +-
+ dblk/efidump.c             |  20 +-
+ devices/devices.h          |   2 +-
+ dmem/MemCommonPart.h       |   2 +-
+ dmem/efidump.c             |  20 +-
+ dmpstore/dmpstore.h        |   2 +-
+ drivers/drivers.h          |   2 +-
+ drvcfg/drvcfg.h            |   2 +-
+ drvdiag/drvdiag.h          |   2 +-
+ edit/editor.h              |   2 +-
+ edit/libEditor.c           |   4 +-
+ err/DebugMask.h            |   2 +-
+ err/err.h                  |   2 +-
+ guid/guid.h                |   2 +-
+ hexedit/heditor.h          |   2 +-
+ hexedit/libEditor.c        |   4 +-
+ inc/shellenv.h             |   9 +-
+ load/load.h                |   2 +-
+ ls/ls.h                    |   5 +-
+ mem/MemCommonPart.h        |   2 +-
+ mem/efidump.c              |  20 +-
+ memmap/memmap.h            |   2 +-
+ mkdir/mkdir.h              |   2 +-
+ mm/mm.h                    |   2 +-
+ mode/mode.h                |   2 +-
+ mount/mount.h              |   2 +-
+ mv/mv.h                    |   2 +-
+ newshell/nshell.h          |   2 +-
+ openinfo/openinfo.h        |   2 +-
+ pci/pci.h                  |   2 +-
+ reset/reset.h              |   2 +-
+ rm/rm.h                    |   2 +-
+ sermode/sermode.h          |   2 +-
+ shellenv/cmddisp.c         | 280 +++++++++++++--------------
+ shellenv/dprot.c           |  28 +--
+ shellenv/map.c             |   2 +-
+ shellenv/protid.c          | 463 ++++++++++++++++++++++-----------------------
+ shellenv/shelle.h          |  10 +-
+ shellenv/shellenvguid.h    |   2 +-
+ stall/stall.h              |   2 +-
+ time/time.h                |   2 +-
+ touch/touch.h              |   2 +-
+ type/type.h                |   2 +-
+ tzone/tzone.h              |   5 +-
+ unload/unload.h            |   5 +-
+ ver/ver.h                  |   2 +-
+ vol/vol.h                  |   2 +-
+ 67 files changed, 597 insertions(+), 621 deletions(-)
+
+diff --git a/DeviceTree/devicetree.h b/DeviceTree/devicetree.h
+index c452fc7..ef250d0 100644
+--- a/DeviceTree/devicetree.h
++++ b/DeviceTree/devicetree.h
+@@ -29,6 +29,6 @@ Revision History
+ 
+ #define EFI_DEVICETREE_GUID \
+   { \
+-    0xf21044af, 0xeef6, 0x4d58, 0xb4, 0x56, 0x32, 0x86, 0xa0, 0x2b, 0x7c, 0x49 \
++    0xf21044af, 0xeef6, 0x4d58, {0xb4, 0x56, 0x32, 0x86, 0xa0, 0x2b, 0x7c, 0x49} \
+   }
+ #endif
+diff --git a/EfiCompress/Compress.h b/EfiCompress/Compress.h
+index 4e8313f..c0004be 100644
+--- a/EfiCompress/Compress.h
++++ b/EfiCompress/Compress.h
+@@ -24,7 +24,7 @@ Abstract:
+ 
+ #define EFI_COMPRESS_GUID \
+   { \
+-    0xfe977fed, 0x19f2, 0x4438, 0xaa, 0x5e, 0x51, 0x9a, 0x68, 0xbc, 0x67, 0x94 \
++    0xfe977fed, 0x19f2, 0x4438, {0xaa, 0x5e, 0x51, 0x9a, 0x68, 0xbc, 0x67, 0x94} \
+   }
+ 
+ EFI_STATUS
+diff --git a/EfiDecompress/Decompress.h b/EfiDecompress/Decompress.h
+index 3d4520c..ba8a1c5 100644
+--- a/EfiDecompress/Decompress.h
++++ b/EfiDecompress/Decompress.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_DECOMPRESS_GUID \
+   { \
+-    0xe15963a9, 0xa05a, 0x480e, 0x91, 0x49, 0x32, 0xe9, 0x24, 0x5d, 0x98, 0xcb \
++    0xe15963a9, 0xa05a, 0x480e, {0x91, 0x49, 0x32, 0xe9, 0x24, 0x5d, 0x98, 0xcb} \
+   }
+ 
+ #endif
+diff --git a/IfConfig/IfConfig.h b/IfConfig/IfConfig.h
+index 4a9d3c5..8cb9c1f 100644
+--- a/IfConfig/IfConfig.h
++++ b/IfConfig/IfConfig.h
+@@ -29,7 +29,7 @@ Abstract:
+ 
+ #define EFI_IFCONFIG_GUID \
+   { \
+-    0xb2f9929a, 0x648c, 0x4a9d, 0xb9, 0x92, 0xb1, 0x26, 0xfa, 0x32, 0x65, 0x82 \
++    0xb2f9929a, 0x648c, 0x4a9d, {0xb9, 0x92, 0xb1, 0x26, 0xfa, 0x32, 0x65, 0x82} \
+   }
+ 
+ #define SEC_TO_NS             10000000
+diff --git a/IpConfig/IpConfig.h b/IpConfig/IpConfig.h
+index 5c975a9..52333b5 100644
+--- a/IpConfig/IpConfig.h
++++ b/IpConfig/IpConfig.h
+@@ -26,7 +26,7 @@ Revision History
+  
+ #define EFI_IPCONFIG_GUID \
+   { \
+-    0x8252915c, 0xf1e9, 0x435c, 0x81, 0x91, 0xad, 0x2f, 0x82, 0x62, 0x23, 0x73 \
++    0x8252915c, 0xf1e9, 0x435c, {0x81, 0x91, 0xad, 0x2f, 0x82, 0x62, 0x23, 0x73} \
+   }
+ 
+ #endif
+diff --git a/Library/ConsistMapping.c b/Library/ConsistMapping.c
+index 61eda8b..46ffca9 100644
+--- a/Library/ConsistMapping.c
++++ b/Library/ConsistMapping.c
+@@ -654,90 +654,90 @@ _DevPathSerialDefault (
+ }
+ 
+ DEV_PATH_CONSIST_MAPPING_TABLE  DevPathConsistMappingTable[] = {
+-  HARDWARE_DEVICE_PATH,
++  {HARDWARE_DEVICE_PATH,
+   HW_PCI_DP,
+   _DevPathSerialDefault,
+-  _DevPathComparePci,
+-  ACPI_DEVICE_PATH,
++  _DevPathComparePci},
++  {ACPI_DEVICE_PATH,
+   ACPI_DP,
+   _DevPathSerialAcpi,
+-  _DevPathCompareAcpi,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareAcpi},
++  {MESSAGING_DEVICE_PATH,
+   MSG_ATAPI_DP,
+   _DevPathSerialAtapi,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_SCSI_DP,
+   _DevPathSerialScsi,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_FIBRECHANNEL_DP,
+   _DevPathSerialFibre,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_1394_DP,
+   _DevPathSerial1394,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_USB_DP,
+   _DevPathSerialUsb,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_I2O_DP,
+   _DevPathSerialI2O,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_MAC_ADDR_DP,
+   _DevPathSerialMacAddr,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_IPv4_DP,
+   _DevPathSerialIPv4,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_IPv6_DP,
+   _DevPathSerialIPv6,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_INFINIBAND_DP,
+   _DevPathSerialInfiniBand,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_UART_DP,
+   _DevPathSerialUart,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_VENDOR_DP,
+   _DevPathSerialVendor,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_DEVICE_LOGICAL_UNIT_DP,
+   _DevPathSerialLUN,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_SATA_DP,
+   _DevPathSerialSata,
+-  _DevPathCompareDefault,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MESSAGING_DEVICE_PATH,
+   MSG_ISCSI_DP,
+   _DevPathSerialIScsi,
+-  _DevPathCompareDefault,
+-  MEDIA_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_HARDDRIVE_DP,
+   _DevPathSerialHardDrive,
+-  _DevPathCompareDefault,
+-  MEDIA_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_CDROM_DP,
+   _DevPathSerialCDROM,
+-  _DevPathCompareDefault,
+-  MEDIA_DEVICE_PATH,
++  _DevPathCompareDefault},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_VENDOR_DP,
+   _DevPathSerialVendor,
+-  _DevPathCompareDefault,
+-  0,
++  _DevPathCompareDefault},
++  {0,
+   0,
+   NULL,
+-  NULL
++  NULL}
+ };
+ 
+ INTN
+diff --git a/Library/DPath.c b/Library/DPath.c
+index ab98bfc..edf3fcb 100644
+--- a/Library/DPath.c
++++ b/Library/DPath.c
+@@ -1321,114 +1321,114 @@ struct {
+   VOID (*Function) (POOL_PRINT *, VOID *);
+ } 
+ DevPathTable[] = {
+-  HARDWARE_DEVICE_PATH,
++  {HARDWARE_DEVICE_PATH,
+   HW_PCI_DP,
+-  _DevPathPci,
+-  HARDWARE_DEVICE_PATH,
++  _DevPathPci},
++  {HARDWARE_DEVICE_PATH,
+   HW_PCCARD_DP,
+-  _DevPathPccard,
+-  HARDWARE_DEVICE_PATH,
++  _DevPathPccard},
++  {HARDWARE_DEVICE_PATH,
+   HW_MEMMAP_DP,
+-  _DevPathMemMap,
+-  HARDWARE_DEVICE_PATH,
++  _DevPathMemMap},
++  {HARDWARE_DEVICE_PATH,
+   HW_VENDOR_DP,
+-  _DevPathVendor,
+-  HARDWARE_DEVICE_PATH,
++  _DevPathVendor},
++  {HARDWARE_DEVICE_PATH,
+   HW_CONTROLLER_DP,
+-  _DevPathController,
+-  ACPI_DEVICE_PATH,
++  _DevPathController},
++  {ACPI_DEVICE_PATH,
+   ACPI_DP,
+-  _DevPathAcpi,
+-  ACPI_DEVICE_PATH,
++  _DevPathAcpi},
++  {ACPI_DEVICE_PATH,
+   ACPI_EXTENDED_DP,
+-  _DevPathExtendedAcpi,
+-  ACPI_DEVICE_PATH,
++  _DevPathExtendedAcpi},
++  {ACPI_DEVICE_PATH,
+   ACPI_ADR_DP,
+-  _DevPathAdrAcpi,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathAdrAcpi},
++  {MESSAGING_DEVICE_PATH,
+   MSG_ATAPI_DP,
+-  _DevPathAtapi,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathAtapi},
++  {MESSAGING_DEVICE_PATH,
+   MSG_SCSI_DP,
+-  _DevPathScsi,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathScsi},
++  {MESSAGING_DEVICE_PATH,
+   MSG_FIBRECHANNEL_DP,
+-  _DevPathFibre,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathFibre},
++  {MESSAGING_DEVICE_PATH,
+   MSG_1394_DP,
+-  _DevPath1394,
+-  MESSAGING_DEVICE_PATH,
++  _DevPath1394},
++  {MESSAGING_DEVICE_PATH,
+   MSG_USB_DP,
+-  _DevPathUsb,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathUsb},
++  {MESSAGING_DEVICE_PATH,
+   MSG_USB_WWID_DP,
+-  _DevPathUsbWWID,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathUsbWWID},
++  {MESSAGING_DEVICE_PATH,
+   MSG_DEVICE_LOGICAL_UNIT_DP,
+-  _DevPathLogicalUnit,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathLogicalUnit},
++  {MESSAGING_DEVICE_PATH,
+   MSG_USB_CLASS_DP,
+-  _DevPathUsbClass,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathUsbClass},
++  {MESSAGING_DEVICE_PATH,
+   MSG_SATA_DP,
+-  _DevPathSata,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathSata},
++  {MESSAGING_DEVICE_PATH,
+   MSG_I2O_DP,
+-  _DevPathI2O,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathI2O},
++  {MESSAGING_DEVICE_PATH,
+   MSG_MAC_ADDR_DP,
+-  _DevPathMacAddr,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathMacAddr},
++  {MESSAGING_DEVICE_PATH,
+   MSG_IPv4_DP,
+-  _DevPathIPv4,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathIPv4},
++  {MESSAGING_DEVICE_PATH,
+   MSG_IPv6_DP,
+-  _DevPathIPv6,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathIPv6},
++  {MESSAGING_DEVICE_PATH,
+   MSG_INFINIBAND_DP,
+-  _DevPathInfiniBand,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathInfiniBand},
++  {MESSAGING_DEVICE_PATH,
+   MSG_UART_DP,
+-  _DevPathUart,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathUart},
++  {MESSAGING_DEVICE_PATH,
+   MSG_VENDOR_DP,
+-  _DevPathVendor,
+-  MESSAGING_DEVICE_PATH,
++  _DevPathVendor},
++  {MESSAGING_DEVICE_PATH,
+   MSG_ISCSI_DP,
+-  _DevPathiSCSI,
+-  MEDIA_DEVICE_PATH,
++  _DevPathiSCSI},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_HARDDRIVE_DP,
+-  _DevPathHardDrive,
+-  MEDIA_DEVICE_PATH,
++  _DevPathHardDrive},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_CDROM_DP,
+-  _DevPathCDROM,
+-  MEDIA_DEVICE_PATH,
++  _DevPathCDROM},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_VENDOR_DP,
+-  _DevPathVendor,
+-  MEDIA_DEVICE_PATH,
++  _DevPathVendor},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_FILEPATH_DP,
+-  _DevPathFilePath,
+-  MEDIA_DEVICE_PATH,
++  _DevPathFilePath},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_PROTOCOL_DP,
+-  _DevPathMediaProtocol,
+-  MEDIA_DEVICE_PATH,
++  _DevPathMediaProtocol},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_FV_DP,
+-  _DevPathFvPath,
+-  MEDIA_DEVICE_PATH,
++  _DevPathFvPath},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_FV_FILEPATH_DP,
+-  _DevPathFvFilePath,
+-  MEDIA_DEVICE_PATH,
++  _DevPathFvFilePath},
++  {MEDIA_DEVICE_PATH,
+   MEDIA_RELATIVE_OFFSET_RANGE_DP,
+-  _DevPathRelativeOffsetRange,
+-  BBS_DEVICE_PATH,
++  _DevPathRelativeOffsetRange},
++  {BBS_DEVICE_PATH,
+   BBS_BBS_DP,
+-  _DevPathBssBss,
+-  END_DEVICE_PATH_TYPE,
++  _DevPathBssBss},
++  {END_DEVICE_PATH_TYPE,
+   END_INSTANCE_DEVICE_PATH_SUBTYPE,
+-  _DevPathEndInstance,
++  _DevPathEndInstance},
++  {0,
+   0,
+-  0,
+-  NULL
++  NULL}
+ };
+ 
+ CHAR16 *
+diff --git a/Library/Data.c b/Library/Data.c
+index 979b3dd..c5053f4 100644
+--- a/Library/Data.c
++++ b/Library/Data.c
+@@ -67,14 +67,14 @@ EFI_UNICODE_COLLATION_PROTOCOL  *UnicodeInterface = &LibStubUnicodeInterface;
+ EFI_GUID                        ShellEnvProtocol = SHELL_ENVIRONMENT_INTERFACE_PROTOCOL;
+ 
+ EFI_DEVICE_PATH_PROTOCOL        LibEndDevicePath[] = {
+-  END_DEVICE_PATH_TYPE,
++  {END_DEVICE_PATH_TYPE,
+   END_ENTIRE_DEVICE_PATH_SUBTYPE,
+-  END_DEVICE_PATH_LENGTH,
+-  0
++  {END_DEVICE_PATH_LENGTH,
++  0}}
+ };
+ 
+ //
+ // protocol GUIDs and other miscellaneous GUIDs
+ //
+-EFI_GUID                        NullGuid                  = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
++EFI_GUID                        NullGuid                  = { 0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0} };
+ EFI_GUID                        UnknownDeviceGuid         = UNKNOWN_DEVICE_GUID;
+diff --git a/Library/Misc.c b/Library/Misc.c
+index 6e85be1..ce0d414 100644
+--- a/Library/Misc.c
++++ b/Library/Misc.c
+@@ -26,17 +26,17 @@ Revision History
+ #if (PLATFORM == NT32)
+ #define LOCAL_EFI_WIN_NT_THUNK_PROTOCOL_GUID \
+   { \
+-    0x58c518b1, 0x76f3, 0x11d4, 0xbc, 0xea, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 \
++    0x58c518b1, 0x76f3, 0x11d4, {0xbc, 0xea, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81} \
+   }
+ 
+ #define LOCAL_EFI_WIN_NT_BUS_DRIVER_IO_PROTOCOL_GUID \
+   { \
+-    0x96eb4ad6, 0xa32a, 0x11d4, 0xbc, 0xfd, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 \
++    0x96eb4ad6, 0xa32a, 0x11d4, {0xbc, 0xfd, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81} \
+   }
+ 
+ #define LOCAL_EFI_WIN_NT_SERIAL_PORT_GUID \
+   { \
+-    0xc95a93d, 0xa006, 0x11d4, 0xbc, 0xfa, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 \
++    0xc95a93d, 0xa006, 0x11d4, {0xbc, 0xfa, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81} \
+   }
+ EFI_GUID WinNtThunkProtocolGuid = LOCAL_EFI_WIN_NT_THUNK_PROTOCOL_GUID;
+ EFI_GUID WinNtIoProtocolGuid    = LOCAL_EFI_WIN_NT_BUS_DRIVER_IO_PROTOCOL_GUID;
+diff --git a/LoadPciRom/LoadPciRom.h b/LoadPciRom/LoadPciRom.h
+index e9db96d..77cfb8c 100644
+--- a/LoadPciRom/LoadPciRom.h
++++ b/LoadPciRom/LoadPciRom.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_LOADPCIROM_GUID \
+   { \
+-    0xe804be71, 0xea78, 0x4b84, 0x99, 0xa1, 0x1a, 0x12, 0xe4, 0x22, 0x6f, 0xd4 \
++    0xe804be71, 0xea78, 0x4b84, {0x99, 0xa1, 0x1a, 0x12, 0xe4, 0x22, 0x6f, 0xd4} \
+   }
+ 
+ #endif
+diff --git a/Ping/Ping.h b/Ping/Ping.h
+index 7867caf..0bb87ed 100644
+--- a/Ping/Ping.h
++++ b/Ping/Ping.h
+@@ -26,7 +26,7 @@ Revision History
+  
+ #define EFI_PING_GUID \
+   { \
+-    0x3047fb8f, 0xa669, 0x4acd, 0x9d, 0x6, 0x76, 0x36, 0x9e, 0x8c, 0xe4, 0xd4 \
++    0x3047fb8f, 0xa669, 0x4acd, {0x9d, 0x6, 0x76, 0x36, 0x9e, 0x8c, 0xe4, 0xd4} \
+   }
+ 
+ #define EFI_IP4_PROTO_ICMP      0x01
+diff --git a/SmbiosView/Smbios.h b/SmbiosView/Smbios.h
+index 8a91b9e..c46156b 100644
+--- a/SmbiosView/Smbios.h
++++ b/SmbiosView/Smbios.h
+@@ -29,7 +29,7 @@ Revision History
+ //
+ #define EFI_SMBIOS_GUID \
+   { \
+-    0xda4ccda5, 0xe09d, 0x4f89, 0xb0, 0xf2, 0xdf, 0x84, 0x5c, 0xbb, 0x92, 0x80 \
++    0xda4ccda5, 0xe09d, 0x4f89, {0xb0, 0xf2, 0xdf, 0x84, 0x5c, 0xbb, 0x92, 0x80} \
+   }
+ 
+ extern EFI_HII_HANDLE HiiHandle;
+diff --git a/TelnetMgmt/TelnetMgmt.h b/TelnetMgmt/TelnetMgmt.h
+index ed3c2f2..842aa24 100644
+--- a/TelnetMgmt/TelnetMgmt.h
++++ b/TelnetMgmt/TelnetMgmt.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_TELNETMGMT_GUID \
+   { \
+-    0x55d41b9a, 0x954d, 0x4fbb, 0x8d, 0x6d, 0x24, 0x75, 0xf5, 0x30, 0x9d, 0x37 \
++    0x55d41b9a, 0x954d, 0x4fbb, {0x8d, 0x6d, 0x24, 0x75, 0xf5, 0x30, 0x9d, 0x37} \
+   }
+ 
+ #endif
+diff --git a/TelnetMgmt/TelnetServer.h b/TelnetMgmt/TelnetServer.h
+index 5eca179..55be722 100644
+--- a/TelnetMgmt/TelnetServer.h
++++ b/TelnetMgmt/TelnetServer.h
+@@ -24,7 +24,7 @@ Abstract:
+ 
+ #define EFI_TELNET_SERVER_PROTOCOL_GUID \
+   { \
+-    0x6d3569d4, 0x85e5, 0x4943, 0xae, 0x46, 0xee, 0x67, 0xa6, 0xe1, 0xab, 0x5a \
++    0x6d3569d4, 0x85e5, 0x4943, {0xae, 0x46, 0xee, 0x67, 0xa6, 0xe1, 0xab, 0x5a} \
+   }
+ 
+ EFI_FORWARD_DECLARATION (EFI_TELNET_SERVER_PROTOCOL);
+diff --git a/attrib/attrib.h b/attrib/attrib.h
+index d14c0f4..da0ff89 100644
+--- a/attrib/attrib.h
++++ b/attrib/attrib.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_ATTRIB_GUID \
+   { \
+-    0xcd691c77, 0xfc45, 0x4d7b, 0xb8, 0x92, 0x92, 0xa, 0x86, 0x2d, 0x67, 0xdc \
++    0xcd691c77, 0xfc45, 0x4d7b, {0xb8, 0x92, 0x92, 0xa, 0x86, 0x2d, 0x67, 0xdc} \
+   }
+ 
+ #endif
+diff --git a/bcfg/bcfg.h b/bcfg/bcfg.h
+index 203dd79..8f0ec56 100644
+--- a/bcfg/bcfg.h
++++ b/bcfg/bcfg.h
+@@ -28,7 +28,7 @@ Revision History
+ 
+ #define EFI_BCFG_GUID \
+   { \
+-    0xd250e364, 0x51c6, 0x49ed, 0xae, 0xbf, 0x6d, 0x83, 0xf5, 0x13, 0x0f, 0x74 \
++    0xd250e364, 0x51c6, 0x49ed, {0xae, 0xbf, 0x6d, 0x83, 0xf5, 0x13, 0x0f, 0x74} \
+   }
+ 
+ //
+diff --git a/cls/cls.h b/cls/cls.h
+index eab21eb..da0432e 100644
+--- a/cls/cls.h
++++ b/cls/cls.h
+@@ -29,10 +29,7 @@ Revision History
+ //
+ #define EFI_CLS_GUID \
+   { \
+-    0x5444b304, 0x6299, 0x446e, \
+-    { \
+-      0xad, 0x69, 0x75, 0x14, 0x0, 0xba, 0xa9, 0x5b \
+-    } \
++    0x5444b304, 0x6299, 0x446e, {0xad, 0x69, 0x75, 0x14, 0x0, 0xba, 0xa9, 0x5b} \
+   }
+ 
+ #endif
+diff --git a/comp/comp.h b/comp/comp.h
+index 4d6c647..53d1a33 100644
+--- a/comp/comp.h
++++ b/comp/comp.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_COMP_GUID \
+   { \
+-    0x7761e2c2, 0x7297, 0x434d, 0xb6, 0x52, 0xa9, 0x76, 0x91, 0xb8, 0x66, 0xf3 \
++    0x7761e2c2, 0x7297, 0x434d, {0xb6, 0x52, 0xa9, 0x76, 0x91, 0xb8, 0x66, 0xf3} \
+   }
+ 
+ #endif
+diff --git a/cp/cp.h b/cp/cp.h
+index 684447e..b8e13b3 100644
+--- a/cp/cp.h
++++ b/cp/cp.h
+@@ -33,7 +33,7 @@ Revision History
+ 
+ #define EFI_CPY_GUID \
+   { \
+-    0xe85745f9, 0x36cf, 0x4d64, 0xaf, 0x48, 0x24, 0xdf, 0xd3, 0x7b, 0x27, 0xd0 \
++    0xe85745f9, 0x36cf, 0x4d64, {0xaf, 0x48, 0x24, 0xdf, 0xd3, 0x7b, 0x27, 0xd0} \
+   }
+ #define CP_BLOCK_SIZE (1024 * 1024)
+ 
+diff --git a/date/date.h b/date/date.h
+index c95ac4d..ab2f709 100644
+--- a/date/date.h
++++ b/date/date.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_DATE_GUID \
+   { \
+-    0x9826d8eb, 0x17c6, 0x48c0, 0x9a, 0x85, 0xe5, 0x3, 0x89, 0x1e, 0x33, 0x30 \
++    0x9826d8eb, 0x17c6, 0x48c0, {0x9a, 0x85, 0xe5, 0x3, 0x89, 0x1e, 0x33, 0x30} \
+   }
+ 
+ #endif
+diff --git a/dblk/dblk.h b/dblk/dblk.h
+index 0341aeb..897b02d 100644
+--- a/dblk/dblk.h
++++ b/dblk/dblk.h
+@@ -30,7 +30,7 @@ Revision History
+ //
+ #define EFI_DBLK_GUID \
+   { \
+-    0xded389c0, 0x956a, 0x4244, 0xae, 0x98, 0xc9, 0x7f, 0xa0, 0x81, 0xca, 0xd8 \
++    0xded389c0, 0x956a, 0x4244, {0xae, 0x98, 0xc9, 0x7f, 0xa0, 0x81, 0xca, 0xd8} \
+   }
+   
+ #define EFI_PARTITION_SIGNATURE       0x5053595320494249
+diff --git a/dblk/efidump.c b/dblk/efidump.c
+index c18b826..6b1a05d 100644
+--- a/dblk/efidump.c
++++ b/dblk/efidump.c
+@@ -158,21 +158,21 @@ typedef struct {
+ } TABLE_HEADER_INFO;
+ 
+ TABLE_HEADER_INFO DblkTableHeader[] = {
+-  EFI_PARTITION_SIGNATURE,
++  {EFI_PARTITION_SIGNATURE,
+   L"Partition",
+-  DblkDumpPartition,
+-  EFI_SYSTEM_TABLE_SIGNATURE,
++  DblkDumpPartition},
++  {EFI_SYSTEM_TABLE_SIGNATURE,
+   L"System",
+-  DblkDumpSystemTable,
+-  EFI_BOOT_SERVICES_SIGNATURE,
++  DblkDumpSystemTable},
++  {EFI_BOOT_SERVICES_SIGNATURE,
+   L"Boot Services",
+-  DblkDumpGenericHeader,
+-  EFI_RUNTIME_SERVICES_SIGNATURE,
++  DblkDumpGenericHeader},
++  {EFI_RUNTIME_SERVICES_SIGNATURE,
+   L"Runtime Services",
+-  DblkDumpGenericHeader,
+-  0x00,
++  DblkDumpGenericHeader},
++  {0x00,
+   L"",
+-  DblkDumpGenericHeader
++  DblkDumpGenericHeader}
+ };
+ 
+ static UINT8   FatNumber[] = { 12, 16, 32, 0 };
+diff --git a/devices/devices.h b/devices/devices.h
+index 19e0983..1d5c7fc 100644
+--- a/devices/devices.h
++++ b/devices/devices.h
+@@ -29,6 +29,6 @@ Revision History
+ 
+ #define EFI_DEVICES_GUID \
+   { \
+-    0x6fabed98, 0x2a7, 0x46a4, 0x84, 0xd1, 0x76, 0xcd, 0x5c, 0x49, 0x78, 0x74 \
++    0x6fabed98, 0x2a7, 0x46a4, {0x84, 0xd1, 0x76, 0xcd, 0x5c, 0x49, 0x78, 0x74} \
+   }
+ #endif
+diff --git a/dmem/MemCommonPart.h b/dmem/MemCommonPart.h
+index f094fbb..33fa4e9 100644
+--- a/dmem/MemCommonPart.h
++++ b/dmem/MemCommonPart.h
+@@ -35,7 +35,7 @@ extern UINT8          STRING_ARRAY_NAME[];
+ //
+ #define EFI_DMEM_GUID \
+   { \
+-    0xb7831e0d, 0x7120, 0x47d2, 0x9b, 0xfb, 0x40, 0xe6, 0x13, 0xa3, 0xf8, 0x5e \
++    0xb7831e0d, 0x7120, 0x47d2, {0x9b, 0xfb, 0x40, 0xe6, 0x13, 0xa3, 0xf8, 0x5e} \
+   }
+ 
+ extern EFI_HII_HANDLE HiiDmemHandle;
+diff --git a/dmem/efidump.c b/dmem/efidump.c
+index 11526f2..7cac9f1 100644
+--- a/dmem/efidump.c
++++ b/dmem/efidump.c
+@@ -158,21 +158,21 @@ typedef struct {
+ } TABLE_HEADER_INFO;
+ 
+ TABLE_HEADER_INFO DmemTableHeader[] = {
+-  EFI_PARTITION_SIGNATURE,
++  {EFI_PARTITION_SIGNATURE,
+   L"Partition",
+-  DumpPartition,
+-  EFI_SYSTEM_TABLE_SIGNATURE,
++  DumpPartition},
++  {EFI_SYSTEM_TABLE_SIGNATURE,
+   L"System",
+-  DumpSystemTable,
+-  EFI_BOOT_SERVICES_SIGNATURE,
++  DumpSystemTable},
++  {EFI_BOOT_SERVICES_SIGNATURE,
+   L"Boot Services",
+-  DumpGenericHeader,
+-  EFI_RUNTIME_SERVICES_SIGNATURE,
++  DumpGenericHeader},
++  {EFI_RUNTIME_SERVICES_SIGNATURE,
+   L"Runtime Services",
+-  DumpGenericHeader,
+-  0x00,
++  DumpGenericHeader},
++  {0x00,
+   L"",
+-  DumpGenericHeader
++  DumpGenericHeader}
+ };
+ 
+ static UINT8   FatNumber[] = { 12, 16, 32, 0 };
+diff --git a/dmpstore/dmpstore.h b/dmpstore/dmpstore.h
+index 32d72ec..2ef1788 100644
+--- a/dmpstore/dmpstore.h
++++ b/dmpstore/dmpstore.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_DMPSTORE_GUID \
+   { \
+-    0xceba463a, 0xfe43, 0x4138, 0xbe, 0x3d, 0x34, 0xc6, 0xc4, 0xe1, 0x31, 0xdd \
++    0xceba463a, 0xfe43, 0x4138, {0xbe, 0x3d, 0x34, 0xc6, 0xc4, 0xe1, 0x31, 0xdd} \
+   }
+ 
+ typedef struct {
+diff --git a/drivers/drivers.h b/drivers/drivers.h
+index 6ef5e12..2b94d96 100644
+--- a/drivers/drivers.h
++++ b/drivers/drivers.h
+@@ -29,7 +29,7 @@ Revision History
+ 
+ #define EFI_DRIVERS_GUID \
+   { \
+-    0x5e1e9209, 0x769a, 0x43bf, 0xba, 0xcb, 0x3c, 0x62, 0xe9, 0x97, 0x5, 0x60 \
++    0x5e1e9209, 0x769a, 0x43bf, {0xba, 0xcb, 0x3c, 0x62, 0xe9, 0x97, 0x5, 0x60} \
+   }
+ 
+ #endif
+diff --git a/drvcfg/drvcfg.h b/drvcfg/drvcfg.h
+index 9e14b9f..31f0678 100644
+--- a/drvcfg/drvcfg.h
++++ b/drvcfg/drvcfg.h
+@@ -29,7 +29,7 @@ Revision History
+ 
+ #define EFI_DRVCFG_GUID \
+   { \
+-    0xbccdfe71, 0xe5c6, 0x4162, 0x9c, 0x9b, 0x47, 0x1a, 0xf5, 0x66, 0xfd, 0x17 \
++    0xbccdfe71, 0xe5c6, 0x4162, {0x9c, 0x9b, 0x47, 0x1a, 0xf5, 0x66, 0xfd, 0x17} \
+   }
+ 
+ #endif
+diff --git a/drvdiag/drvdiag.h b/drvdiag/drvdiag.h
+index 53d0478..7b40dbd 100644
+--- a/drvdiag/drvdiag.h
++++ b/drvdiag/drvdiag.h
+@@ -29,7 +29,7 @@ Revision History
+ 
+ #define EFI_DRVDIAG_GUID \
+   { \
+-    0xc3c8609c, 0x36f2, 0x4041, 0xa1, 0xab, 0x56, 0x5d, 0x3a, 0x4d, 0xe3, 0xb2 \
++    0xc3c8609c, 0x36f2, 0x4041, {0xa1, 0xab, 0x56, 0x5d, 0x3a, 0x4d, 0xe3, 0xb2} \
+   }
+ 
+ #endif
+diff --git a/edit/editor.h b/edit/editor.h
+index 2dd106b..5122d40 100644
+--- a/edit/editor.h
++++ b/edit/editor.h
+@@ -22,7 +22,7 @@ Abstract:
+ 
+ #define EFI_EDIT_GUID \
+   { \
+-    0x89e82255, 0x5fad, 0x4be8, 0xb2, 0xce, 0xad, 0xa8, 0x38, 0xf9, 0x6c, 0x43 \
++    0x89e82255, 0x5fad, 0x4be8, {0xb2, 0xce, 0xad, 0xa8, 0x38, 0xf9, 0x6c, 0x43} \
+   }
+ 
+ #include "editortype.h"
+diff --git a/edit/libEditor.c b/edit/libEditor.c
+index b160246..80af5b9 100644
+--- a/edit/libEditor.c
++++ b/edit/libEditor.c
+@@ -61,8 +61,8 @@ EFI_EDITOR_GLOBAL_EDITOR      MainEditorConst = {
+   &MainInputBar,
+   &FileBuffer,
+   {
+-    0,
+-    0
++    {0,
++    0}
+   },
+   {
+     0,
+diff --git a/err/DebugMask.h b/err/DebugMask.h
+index 61136aa..01ba544 100644
+--- a/err/DebugMask.h
++++ b/err/DebugMask.h
+@@ -28,7 +28,7 @@ Abstract:
+ //
+ #define EFI_DEBUG_MASK_PROTOCOL_GUID \
+   { \
+-    0x4c8a2451, 0xc207, 0x405b, 0x96, 0x94, 0x99, 0xea, 0x13, 0x25, 0x13, 0x41 \
++    0x4c8a2451, 0xc207, 0x405b, {0x96, 0x94, 0x99, 0xea, 0x13, 0x25, 0x13, 0x41} \
+   }
+ 
+ #define EFI_DEBUG_MASK_REVISION 0x00010000
+diff --git a/err/err.h b/err/err.h
+index 133006a..35099a4 100644
+--- a/err/err.h
++++ b/err/err.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_ERR_GUID \
+   { \
+-    0xdaab229b, 0x7883, 0x4f5f, 0xac, 0x6e, 0x15, 0x20, 0xc7, 0xe7, 0x8f, 0xd4 \
++    0xdaab229b, 0x7883, 0x4f5f, {0xac, 0x6e, 0x15, 0x20, 0xc7, 0xe7, 0x8f, 0xd4} \
+   }
+ 
+ #endif
+diff --git a/guid/guid.h b/guid/guid.h
+index e6cf872..9ef1b04 100644
+--- a/guid/guid.h
++++ b/guid/guid.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_GUID_GUID \
+   { \
+-    0x425bff44, 0x1cae, 0x4c27, 0x98, 0x2c, 0x25, 0xc8, 0x74, 0x59, 0xdf, 0xd6 \
++    0x425bff44, 0x1cae, 0x4c27, {0x98, 0x2c, 0x25, 0xc8, 0x74, 0x59, 0xdf, 0xd6} \
+   }
+ 
+ #endif
+diff --git a/hexedit/heditor.h b/hexedit/heditor.h
+index 3cd4d84..1c259da 100644
+--- a/hexedit/heditor.h
++++ b/hexedit/heditor.h
+@@ -22,7 +22,7 @@ Abstract:
+ 
+ #define EFI_HEXEDIT_GUID \
+   { \
+-    0x39d796d9, 0x3544, 0x4166, 0x84, 0x6e, 0x21, 0xf9, 0x1b, 0xe0, 0xa8, 0x72 \
++    0x39d796d9, 0x3544, 0x4166, {0x84, 0x6e, 0x21, 0xf9, 0x1b, 0xe0, 0xa8, 0x72} \
+   }
+ 
+ #include "heditortype.h"
+diff --git a/hexedit/libEditor.c b/hexedit/libEditor.c
+index ac085b7..b8aad55 100644
+--- a/hexedit/libEditor.c
++++ b/hexedit/libEditor.c
+@@ -65,8 +65,8 @@ HEFI_EDITOR_GLOBAL_EDITOR       HMainEditorConst = {
+   &HBufferImage,
+   &HClipBoard,
+   {
+-    0,
+-    0
++    {0,
++    0}
+   },
+   {
+     0,
+diff --git a/inc/shellenv.h b/inc/shellenv.h
+index 1334f2c..cea61b5 100644
+--- a/inc/shellenv.h
++++ b/inc/shellenv.h
+@@ -52,7 +52,7 @@ extern "C"
+ //
+ #define SHELL_INTERFACE_PROTOCOL \
+   { \
+-    0x47c7b223, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b \
++    0x47c7b223, 0xc42a, 0x11d2, {0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b} \
+   }
+ 
+ typedef struct _EFI_SHELL_ARG_INFO {
+@@ -96,7 +96,7 @@ typedef struct _EFI_SHELL_INTERFACE {
+ //
+ #define SHELL_ENVIRONMENT_INTERFACE_PROTOCOL \
+   { \
+-    0x47c7b221, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b \
++    0x47c7b221, 0xc42a, 0x11d2, {0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b} \
+   }
+ 
+ typedef
+@@ -399,10 +399,7 @@ EFI_STATUS
+ 
+ #define EFI_SE_EXT_SIGNATURE_GUID \
+   { \
+-    0xd2c18636, 0x40e5, 0x4eb5, \
+-    { \
+-      0xa3, 0x1b, 0x36, 0x69, 0x5f, 0xd4, 0x2c, 0x87 \
+-    } \
++    0xd2c18636, 0x40e5, 0x4eb5, {0xa3, 0x1b, 0x36, 0x69, 0x5f, 0xd4, 0x2c, 0x87} \
+   }
+ #define EFI_SHELL_MAJOR_VER 0x00000001
+ #define EFI_SHELL_MINOR_VER 0x00000000
+diff --git a/load/load.h b/load/load.h
+index 477c816..1289b6c 100644
+--- a/load/load.h
++++ b/load/load.h
+@@ -29,7 +29,7 @@ Revision History
+ //
+ #define EFI_LOAD_GUID \
+   { \
+-    0xd75ec988, 0x4aff, 0x4ed7, 0xb3, 0x68, 0xf4, 0x3d, 0xb2, 0xf5, 0x69, 0x72 \
++    0xd75ec988, 0x4aff, 0x4ed7, {0xb3, 0x68, 0xf4, 0x3d, 0xb2, 0xf5, 0x69, 0x72} \
+   }
+ 
+ #endif
+diff --git a/ls/ls.h b/ls/ls.h
+index a2a409c..11f6ca2 100644
+--- a/ls/ls.h
++++ b/ls/ls.h
+@@ -35,10 +35,7 @@ extern UINT8          STRING_ARRAY_NAME[];
+ 
+ #define EFI_LS_GUID \
+   { \
+-    0x4884f436, 0x3bbd, 0x4d8f, \
+-    { \
+-      0x86, 0xd4, 0x8b, 0xf, 0x4a, 0x6a, 0x4d, 0x15 \
+-    } \
++    0x4884f436, 0x3bbd, 0x4d8f, {0x86, 0xd4, 0x8b, 0xf, 0x4a, 0x6a, 0x4d, 0x15} \
+   }
+ 
+ extern EFI_HII_HANDLE HiiLsHandle;
+diff --git a/mem/MemCommonPart.h b/mem/MemCommonPart.h
+index f1fd015..60e8dc0 100644
+--- a/mem/MemCommonPart.h
++++ b/mem/MemCommonPart.h
+@@ -36,7 +36,7 @@ extern UINT8          STRING_ARRAY_NAME[];
+ //
+ #define EFI_MEM_GUID \
+   { \
+-    0xa2d36078, 0x4b03, 0x45c9, 0xad, 0xa9, 0x81, 0x23, 0xd, 0xa8, 0xb0, 0x73  \
++    0xa2d36078, 0x4b03, 0x45c9, {0xad, 0xa9, 0x81, 0x23, 0xd, 0xa8, 0xb0, 0x73} \
+   }
+ 
+ extern EFI_HII_HANDLE HiiMemHandle;
+diff --git a/mem/efidump.c b/mem/efidump.c
+index febb410..faa4e0d 100644
+--- a/mem/efidump.c
++++ b/mem/efidump.c
+@@ -158,21 +158,21 @@ typedef struct {
+ } TABLE_HEADER_INFO;
+ 
+ TABLE_HEADER_INFO TableHeader[] = {
+-  EFI_PARTITION_SIGNATURE,
++  {EFI_PARTITION_SIGNATURE,
+   L"Partition",
+-  DumpMemPartition,
+-  EFI_SYSTEM_TABLE_SIGNATURE,
++  DumpMemPartition},
++  {EFI_SYSTEM_TABLE_SIGNATURE,
+   L"System",
+-  DumpMemSystemTable,
+-  EFI_BOOT_SERVICES_SIGNATURE,
++  DumpMemSystemTable},
++  {EFI_BOOT_SERVICES_SIGNATURE,
+   L"Boot Services",
+-  DumpMemGenericHeader,
+-  EFI_RUNTIME_SERVICES_SIGNATURE,
++  DumpMemGenericHeader},
++  {EFI_RUNTIME_SERVICES_SIGNATURE,
+   L"Runtime Services",
+-  DumpMemGenericHeader,
+-  0x00,
++  DumpMemGenericHeader},
++  {0x00,
+   L"",
+-  DumpMemGenericHeader
++  DumpMemGenericHeader}
+ };
+ 
+ static UINT8   FatNumber[] = { 12, 16, 32, 0 };
+diff --git a/memmap/memmap.h b/memmap/memmap.h
+index d9f5d72..e212865 100644
+--- a/memmap/memmap.h
++++ b/memmap/memmap.h
+@@ -29,7 +29,7 @@ Revision History
+ //
+ #define EFI_MEMMAP_GUID \
+   { \
+-    0xc274da66, 0x2dc0, 0x4874, 0x9e, 0xaf, 0x30, 0x87, 0xe8, 0x1, 0xab, 0x30 \
++    0xc274da66, 0x2dc0, 0x4874, {0x9e, 0xaf, 0x30, 0x87, 0xe8, 0x1, 0xab, 0x30} \
+   }
+ 
+ #endif
+diff --git a/mkdir/mkdir.h b/mkdir/mkdir.h
+index 14fef02..8d2a0c0 100644
+--- a/mkdir/mkdir.h
++++ b/mkdir/mkdir.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_MKDIR_GUID \
+   { \
+-    0x75ecb57f, 0x4264, 0x49d2, 0x98, 0xe6, 0x39, 0x1a, 0x32, 0x17, 0x9d, 0xf2 \
++    0x75ecb57f, 0x4264, 0x49d2, {0x98, 0xe6, 0x39, 0x1a, 0x32, 0x17, 0x9d, 0xf2} \
+   }
+ 
+ #endif
+diff --git a/mm/mm.h b/mm/mm.h
+index 8306f4c..0f2d67a 100644
+--- a/mm/mm.h
++++ b/mm/mm.h
+@@ -29,7 +29,7 @@ Revision History
+ //
+ #define EFI_IOMOD_GUID \
+   { \
+-    0xc9f33f7c, 0x7d45, 0x4c1b, 0x8f, 0xe5, 0x4a, 0xeb, 0xff, 0x19, 0xb8, 0xec \
++    0xc9f33f7c, 0x7d45, 0x4c1b, {0x8f, 0xe5, 0x4a, 0xeb, 0xff, 0x19, 0xb8, 0xec} \
+   }
+ 
+ #endif
+diff --git a/mode/mode.h b/mode/mode.h
+index eadbac1..2515fb0 100644
+--- a/mode/mode.h
++++ b/mode/mode.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_MODE_GUID \
+   { \
+-    0x3df0dcbf, 0x5ca4, 0x4265, 0xb2, 0xb5, 0xeb, 0x88, 0x21, 0x35, 0xf3, 0x63 \
++    0x3df0dcbf, 0x5ca4, 0x4265, {0xb2, 0xb5, 0xeb, 0x88, 0x21, 0x35, 0xf3, 0x63} \
+   }
+ 
+ #endif
+diff --git a/mount/mount.h b/mount/mount.h
+index afd795e..6db4988 100644
+--- a/mount/mount.h
++++ b/mount/mount.h
+@@ -29,7 +29,7 @@ Revision History
+ 
+ #define EFI_MOUNT_GUID \
+   { \
+-    0xd2ab9ff8, 0xdbce, 0x423d, 0xa8, 0x6c, 0x3, 0x93, 0x3e, 0xe7, 0x9, 0x21 \
++    0xd2ab9ff8, 0xdbce, 0x423d, {0xa8, 0x6c, 0x3, 0x93, 0x3e, 0xe7, 0x9, 0x21} \
+   }
+ 
+ #endif
+diff --git a/mv/mv.h b/mv/mv.h
+index 2dbf314..73f8de8 100644
+--- a/mv/mv.h
++++ b/mv/mv.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_MV_GUID \
+   { \
+-    0x544d0071, 0x68df, 0x4550, 0x8b, 0x5f, 0x57, 0x16, 0x78, 0x99, 0x53, 0x2 \
++    0x544d0071, 0x68df, 0x4550, {0x8b, 0x5f, 0x57, 0x16, 0x78, 0x99, 0x53, 0x2} \
+   }
+ 
+ #define EFI_FILE_STRING_SIZE  260
+diff --git a/newshell/nshell.h b/newshell/nshell.h
+index d3d5e34..f874fbf 100644
+--- a/newshell/nshell.h
++++ b/newshell/nshell.h
+@@ -29,7 +29,7 @@ Revision History
+ 
+ #define EFI_NSHELL_GUID \
+   { \
+-    0x2398750f, 0xec93, 0x4124, 0xa3, 0x64, 0xb, 0x2d, 0xb8, 0x20, 0x59, 0x6 \
++    0x2398750f, 0xec93, 0x4124, {0xa3, 0x64, 0xb, 0x2d, 0xb8, 0x20, 0x59, 0x6} \
+   }
+ 
+ //
+diff --git a/openinfo/openinfo.h b/openinfo/openinfo.h
+index fdd070d..f647f78 100644
+--- a/openinfo/openinfo.h
++++ b/openinfo/openinfo.h
+@@ -29,7 +29,7 @@ Revision History
+ 
+ #define EFI_OPENINFO_GUID \
+   { \
+-    0x1f894d67, 0xea9, 0x4581, 0xb7, 0x61, 0xac, 0x2a, 0x77, 0xa4, 0x63, 0xf3 \
++    0x1f894d67, 0xea9, 0x4581, {0xb7, 0x61, 0xac, 0x2a, 0x77, 0xa4, 0x63, 0xf3} \
+   }
+ 
+ #endif
+diff --git a/pci/pci.h b/pci/pci.h
+index 6a3ef76..0ac3ad3 100644
+--- a/pci/pci.h
++++ b/pci/pci.h
+@@ -27,7 +27,7 @@ Revision History
+ 
+ #define EFI_PCI_GUID \
+   { \
+-    0x388da6c3, 0x3447, 0x4b1f, 0xa0, 0xba, 0xa9, 0xe8, 0xa2, 0x87, 0xf1, 0x76 \
++    0x388da6c3, 0x3447, 0x4b1f, {0xa0, 0xba, 0xa9, 0xe8, 0xa2, 0x87, 0xf1, 0x76} \
+   }
+ 
+ #include "Tiano.h"
+diff --git a/reset/reset.h b/reset/reset.h
+index 737fa11..9a7a3ea 100644
+--- a/reset/reset.h
++++ b/reset/reset.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_RESET_GUID \
+   { \
+-    0x1b298dd8, 0x55f4, 0x41f2, 0x9b, 0x33, 0xc7, 0x49, 0xa0, 0xfc, 0xf, 0x5f \
++    0x1b298dd8, 0x55f4, 0x41f2, {0x9b, 0x33, 0xc7, 0x49, 0xa0, 0xfc, 0xf, 0x5f} \
+   }
+ 
+ #endif
+diff --git a/rm/rm.h b/rm/rm.h
+index 837ca7c..3e92641 100644
+--- a/rm/rm.h
++++ b/rm/rm.h
+@@ -33,7 +33,7 @@ Revision History
+ 
+ #define EFI_RM_GUID \
+   { \
+-    0x38eec554, 0xd163, 0x49f0, 0xac, 0xfa, 0x24, 0x2f, 0xa9, 0xf8, 0x45, 0xfb \
++    0x38eec554, 0xd163, 0x49f0, {0xac, 0xfa, 0x24, 0x2f, 0xa9, 0xf8, 0x45, 0xfb} \
+   }
+ 
+ extern UINT8          STRING_ARRAY_NAME[];
+diff --git a/sermode/sermode.h b/sermode/sermode.h
+index 71a719b..f5a766e 100644
+--- a/sermode/sermode.h
++++ b/sermode/sermode.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_SERMODEB_GUID \
+   { \
+-    0x72c4e87d, 0x28e, 0x414c, 0x86, 0x34, 0xc3, 0xee, 0x4d, 0xc9, 0x84, 0xd8 \
++    0x72c4e87d, 0x28e, 0x414c, {0x86, 0x34, 0xc3, 0xee, 0x4d, 0xc9, 0x84, 0xd8} \
+   }
+ 
+ #endif
+diff --git a/shellenv/cmddisp.c b/shellenv/cmddisp.c
+index 59c4b1f..7af4b84 100644
+--- a/shellenv/cmddisp.c
++++ b/shellenv/cmddisp.c
+@@ -684,221 +684,221 @@ struct {
+ }
+ 
+ SEnvInternalCommands[] = {
+-  SEnvHelp,
++  {SEnvHelp,
+   L"?",
+-  SEnvHelpGetLineHelp,
+-  SEnvHelp,
++  SEnvHelpGetLineHelp},
++  {SEnvHelp,
+   L"help",
+-  SEnvHelpGetLineHelp,
+-  SEnvCmdSet,
++  SEnvHelpGetLineHelp},
++  {SEnvCmdSet,
+   L"set",
+-  SEnvCmdSetGetLineHelp,
+-  SEnvCmdAlias,
++  SEnvCmdSetGetLineHelp},
++  {SEnvCmdAlias,
+   L"alias",
+-  SEnvCmdAliasGetLineHelp,
+-  SEnvCmdDH,
++  SEnvCmdAliasGetLineHelp},
++  {SEnvCmdDH,
+   L"dh",
+-  SEnvCmdDHGetLineHelp,
+-  SEnvCmdConnect,
++  SEnvCmdDHGetLineHelp},
++  {SEnvCmdConnect,
+   L"connect",
+-  SEnvCmdConnectGetLineHelp,
+-  SEnvCmdDisconnect,
++  SEnvCmdConnectGetLineHelp},
++  {SEnvCmdDisconnect,
+   L"disconnect",
+-  SEnvCmdDisconnectGetLineHelp,
+-  SEnvCmdReconnect,
++  SEnvCmdDisconnectGetLineHelp},
++  {SEnvCmdReconnect,
+   L"reconnect",
+-  SEnvCmdReconnectGetLineHelp,
+-  SEnvCmdMap,
++  SEnvCmdReconnectGetLineHelp},
++  {SEnvCmdMap,
+   L"map",
+-  SEnvCmdMapGetLineHelp,
+-  SEnvCmdCd,
++  SEnvCmdMapGetLineHelp},
++  {SEnvCmdCd,
+   L"cd",
+-  SEnvCmdCdGetLineHelp,
+-  SEnvCmdEcho,
++  SEnvCmdCdGetLineHelp},
++  {SEnvCmdEcho,
+   L"echo",
+-  SEnvCmdEchoGetLineHelp,
+-  SEnvCmdIf,
++  SEnvCmdEchoGetLineHelp},
++  {SEnvCmdIf,
+   L"if",
+-  SEnvCmdIfGetLineHelp,
+-  SEnvCmdElse,
++  SEnvCmdIfGetLineHelp},
++  {SEnvCmdElse,
+   L"else",
+-  SEnvCmdElseGetLineHelp,
+-  SEnvCmdEndif,
++  SEnvCmdElseGetLineHelp},
++  {SEnvCmdEndif,
+   L"endif",
+-  SEnvCmdEndifGetLineHelp,
+-  SEnvCmdShift,
++  SEnvCmdEndifGetLineHelp},
++  {SEnvCmdShift,
+   L"shift",
+-  SEnvCmdShiftGetLineHelp,
+-  SEnvCmdGoto,
++  SEnvCmdShiftGetLineHelp},
++  {SEnvCmdGoto,
+   L"goto",
+-  SEnvCmdGotoGetLineHelp,
+-  SEnvCmdFor,
++  SEnvCmdGotoGetLineHelp},
++  {SEnvCmdFor,
+   L"for",
+-  SEnvCmdForGetLineHelp,
+-  SEnvCmdEndfor,
++  SEnvCmdForGetLineHelp},
++  {SEnvCmdEndfor,
+   L"endfor",
+-  SEnvCmdEndforGetLineHelp,
+-  SEnvCmdPause,
++  SEnvCmdEndforGetLineHelp},
++  {SEnvCmdPause,
+   L"pause",
+-  SEnvCmdPauseGetLineHelp,
+-  SEnvExit,
++  SEnvCmdPauseGetLineHelp},
++  {SEnvExit,
+   L"exit",
+-  SEnvExitGetLineHelp,
++  SEnvExitGetLineHelp},
+ 
+-  SEnvLoadDefaults,
++  {SEnvLoadDefaults,
+   L"_load_defaults",
+-  0,
+-  SEnvNoUse,
++  0},
++  {SEnvNoUse,
+   L"_this_is_not_a_useful_command",
+-  0,
++  0},
+ 
+ #ifdef EFI_MONOSHELL
+-  InitializeUnload,
++  {InitializeUnload,
+   L"unload",
+-  InitializeUnloadGetLineHelp,
+-  DriversMain,
++  InitializeUnloadGetLineHelp},
++  {DriversMain,
+   L"drivers",
+-  DriversGetLineHelp,
+-  DrvcfgMain,
++  DriversGetLineHelp},
++  {DrvcfgMain,
+   L"drvcfg",
+-  DrvcfgGetLineHelp,
+-  DrvdiagMain,
++  DrvcfgGetLineHelp},
++  {DrvdiagMain,
+   L"drvdiag",
+-  DrvdiagGetLineHelp,
+-  InitializeReset,
++  DrvdiagGetLineHelp},
++  {InitializeReset,
+   L"reset",
+-  InitializeResetGetLineHelp,
+-  InitializeAttrib,
++  InitializeResetGetLineHelp},
++  {InitializeAttrib,
+   L"attrib",
+-  InitializeAttribGetLineHelp,
+-  InitializeCls,
++  InitializeAttribGetLineHelp},
++  {InitializeCls,
+   L"cls",
+-  InitializeClsGetLineHelp,
+-  InitializeCP,
++  InitializeClsGetLineHelp},
++  {InitializeCP,
+   L"cp",
+-  InitializeCPGetLineHelp,
+-  InitializeDate,
++  InitializeCPGetLineHelp},
++  {InitializeDate,
+   L"date",
+-  InitializeDateGetLineHelp,
+-  InitializeLS,
++  InitializeDateGetLineHelp},
++  {InitializeLS,
+   L"ls",
+-  InitializeLSGetLineHelp,
+-  InitializeMkDir,
++  InitializeLSGetLineHelp},
++  {InitializeMkDir,
+   L"mkdir",
+-  InitializeMkDirGetLineHelp,
+-  InitializeMv,
++  InitializeMkDirGetLineHelp},
++  {InitializeMv,
+   L"mv",
+-  InitializeMvGetLineHelp,
+-  InitializeRM,
++  InitializeMvGetLineHelp},
++  {InitializeRM,
+   L"rm",
+-  InitializeRMGetLineHelp,
+-  InitializeVer,
++  InitializeRMGetLineHelp},
++  {InitializeVer,
+   L"ver",
+-  InitializeVerGetLineHelp,
+-  InitializeTouch,
++  InitializeVerGetLineHelp},
++  {InitializeTouch,
+   L"touch",
+-  InitializeTouchGetLineHelp,
+-  InitializeTime,
++  InitializeTouchGetLineHelp},
++  {InitializeTime,
+   L"time",
+-  InitializeTimeGetLineHelp,
+-  InitializeLoad,
++  InitializeTimeGetLineHelp},
++  {InitializeLoad,
+   L"load",
+-  InitializeLoadGetLineHelp,
+-  InitializeType,
++  InitializeLoadGetLineHelp},
++  {InitializeType,
+   L"type",
+-  InitializeTypeGetLineHelp,
+-  InitializeVol,
++  InitializeTypeGetLineHelp},
++  {InitializeVol,
+   L"vol",
+-  InitializeVolGetLineHelp,
++  InitializeVolGetLineHelp},
+ 
+ #ifdef EFI_FULLSHELL
+-  InitializeBcfg,
++  {InitializeBcfg,
+   L"bcfg",
+-  InitializeBcfgGetLineHelp,
+-  InitializeComp,
++  InitializeBcfgGetLineHelp},
++  {InitializeComp,
+   L"comp",
+-  InitializeCompGetLineHelp,
+-  DumpBlockDev,
++  InitializeCompGetLineHelp},
++  {DumpBlockDev,
+   L"dblk",
+-  InitializeDblkGetLineHelp,
+-  DevicesMain,
++  InitializeDblkGetLineHelp},
++  {DevicesMain,
+   L"devices",
+-  InitializeDevicesGetLineHelp,
+-  DevicetreeMain,
++  InitializeDevicesGetLineHelp},
++  {DevicetreeMain,
+   L"devtree",
+-  DevicetreeMainGetLineHelp,
+-  DumpMem,
++  DevicetreeMainGetLineHelp},
++  {DumpMem,
+   L"dmem",
+-  DumpMemGetLineHelp,
+-  InitializeDumpStore,
++  DumpMemGetLineHelp},
++  {InitializeDumpStore,
+   L"dmpstore",
+-  InitializeDumpStoreGetLineHelp,
+-  InitializeEFIEditor,
++  InitializeDumpStoreGetLineHelp},
++  {InitializeEFIEditor,
+   L"edit",
+-  InitializeEFIEditorGetLineHelp,
+-  InitializeCompress,
++  InitializeEFIEditorGetLineHelp},
++  {InitializeCompress,
+   L"eficompress",
+-  InitializeCompressGetLineHelp,
+-  InitializeDecompress,
++  InitializeCompressGetLineHelp},
++  {InitializeDecompress,
+   L"efidecompress",
+-  InitializeDecompressGetLineHelp,
+-  InitializeError,
++  InitializeDecompressGetLineHelp},
++  {InitializeError,
+   L"err",
+-  InitializeErrorGetLineHelp,
+-  GuidMain,
++  InitializeErrorGetLineHelp},
++  {GuidMain,
+   L"guid",
+-  GuidMainGetLineHelp,
+-  InitializeEFIHexEditor,
++  GuidMainGetLineHelp},
++  {InitializeEFIHexEditor,
+   L"hexedit",
+-  InitializeEFIHexEditorGetLineHelp,
+-  Ping,
++  InitializeEFIHexEditorGetLineHelp},
++  {Ping,
+   L"ping",
+-  PingGetLineHelp,
+-  IfConfig,
++  PingGetLineHelp},
++  {IfConfig,
+   L"ifconfig",
+-  IfConfigGetLineHelp,
+-  InitializeIpConfig,
++  IfConfigGetLineHelp},
++  {InitializeIpConfig,
+   L"ipconfig",
+-  InitializeIpConfigGetLineHelp,
+-  InitializeLoadPciRom,
++  InitializeIpConfigGetLineHelp},
++  {InitializeLoadPciRom,
+   L"loadpcirom",
+-  InitializeLoadPciRomGetLineHelp,
+-  DumpMm,
++  InitializeLoadPciRomGetLineHelp},
++  {DumpMm,
+   L"mem",
+-  DumpMmGetLineHelp,
+-  InitializeMemmap,
++  DumpMmGetLineHelp},
++  {InitializeMemmap,
+   L"memmap",
+-  InitializeMemmapGetLineHelp,
+-  DumpIoModify,
++  InitializeMemmapGetLineHelp},
++  {DumpIoModify,
+   L"mm",
+-  InitializeMMGetLineHelp,
+-  InitializeMode,
++  InitializeMMGetLineHelp},
++  {InitializeMode,
+   L"mode",
+-  InitializeModeGetLineHelp,
+-  MountMain,
++  InitializeModeGetLineHelp},
++  {MountMain,
+   L"mount",
+-  MountMainGetLineHelp,
+-  OpeninfoMain,
++  MountMainGetLineHelp},
++  {OpeninfoMain,
+   L"openinfo",
+-  InitializeOpenInfoGetLineHelp,
+-  PciDump,
++  InitializeOpenInfoGetLineHelp},
++  {PciDump,
+   L"pci",
+-  InitializePciGetLineHelp,
+-  InitializeSerialMode,
++  InitializePciGetLineHelp},
++  {InitializeSerialMode,
+   L"sermode",
+-  InitializeSerialModeGetLineHelp,
+-  InitializeSmbiosViewApplication,
++  InitializeSerialModeGetLineHelp},
++  {InitializeSmbiosViewApplication,
+   L"smbiosview",
+-  InitializeSmbiosViewApplicationGetLineHelp,
+-  InitializeStall,
++  InitializeSmbiosViewApplicationGetLineHelp},
++  {InitializeStall,
+   L"stall",
+-  InitializeStallGetLineHelp,
+-  InitializeTelnetMgmt,
++  InitializeStallGetLineHelp},
++  {InitializeTelnetMgmt,
+   L"telnetmgmt",
+-  InitializeTelnetmgmtGetLineHelp,
+-  InitializeTZone,
++  InitializeTelnetmgmtGetLineHelp},
++  {InitializeTZone,
+   L"timezone",
+-  InitializeZoneGetLineHelp,
++  InitializeZoneGetLineHelp},
+ #endif
+ 
+ #endif
+diff --git a/shellenv/dprot.c b/shellenv/dprot.c
+index 9042b72..d38d1ad 100644
+--- a/shellenv/dprot.c
++++ b/shellenv/dprot.c
+@@ -664,42 +664,42 @@ Returns:
+ }
+ 
+ struct DevicePathTypes  SEnvDP_Strings[] = {
+-  0x00,
++  {0x00,
+   0x01,
+   L"Illegal",
+   SEnvDP_IlleagalStr,
+-  NULL,
+-  0x01,
++  NULL},
++  {0x01,
+   0x05,
+   L"Hardware",
+   SEnvDP_HardwareStr,
+-  SEnvHardwareDevicePathEntry,
+-  0x02,
++  SEnvHardwareDevicePathEntry},
++  {0x02,
+   0x03,
+   L"ACPI",
+   SEnvDP_ACPI_Str,
+-  SEnvAcpiDevicePathEntry,
+-  0x03,
++  SEnvAcpiDevicePathEntry},
++  {0x03,
+   0x13,
+   L"Messaging",
+   SEnvDP_MessageStr,
+-  SEnvMessagingDevicePathEntry,
+-  0x04,
++  SEnvMessagingDevicePathEntry},
++  {0x04,
+   0x08,
+   L"Media",
+   SEnvDP_MediaStr,
+-  SEnvMediaDevicePathEntry,
+-  0x05,
++  SEnvMediaDevicePathEntry},
++  {0x05,
+   0x01,
+   L"BIOS Boot Spec",
+   SEnvDP_BBS_Str,
+-  NULL,
++  NULL},
+ 
+-  END_DEVICE_PATH_TYPE,
++  {END_DEVICE_PATH_TYPE,
+   0x01,
+   L"End",
+   SEnvDP_IlleagalStr,
+-  NULL
++  NULL}
+ };
+ 
+ VOID
+diff --git a/shellenv/map.c b/shellenv/map.c
+index a595c41..37319ec 100644
+--- a/shellenv/map.c
++++ b/shellenv/map.c
+@@ -50,7 +50,7 @@ typedef struct {
+ 
+ #define DEFAULT_MAPPING_TABLE_GUID \
+   { \
+-    0xFC60F54F, 0x2624, 0x4834, 0xBE, 0x6E, 0xEA, 0x1C, 0xC9, 0x9D, 0x13, 0x92 \
++    0xFC60F54F, 0x2624, 0x4834, {0xBE, 0x6E, 0xEA, 0x1C, 0xC9, 0x9D, 0x13, 0x92} \
+   }
+ 
+ typedef struct {
+diff --git a/shellenv/protid.c b/shellenv/protid.c
+index 88ebb39..1c74abd 100644
+--- a/shellenv/protid.c
++++ b/shellenv/protid.c
+@@ -29,17 +29,17 @@ Revision History
+ #if (PLATFORM == NT32)
+ #define LOCAL_EFI_WIN_NT_THUNK_PROTOCOL_GUID \
+   { \
+-    0x58c518b1, 0x76f3, 0x11d4, 0xbc, 0xea, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 \
++    0x58c518b1, 0x76f3, 0x11d4, {0xbc, 0xea, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81} \
+   }
+ 
+ #define LOCAL_EFI_WIN_NT_BUS_DRIVER_IO_PROTOCOL_GUID \
+   { \
+-    0x96eb4ad6, 0xa32a, 0x11d4, 0xbc, 0xfd, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 \
++    0x96eb4ad6, 0xa32a, 0x11d4, {0xbc, 0xfd, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81} \
+   }
+ 
+ #define LOCAL_EFI_WIN_NT_SERIAL_PORT_GUID \
+   { \
+-    0xc95a93d, 0xa006, 0x11d4, 0xbc, 0xfa, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 \
++    0xc95a93d, 0xa006, 0x11d4, {0xbc, 0xfa, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81} \
+   }
+ #endif
+ 
+@@ -53,534 +53,525 @@ SEnvInternalProtocolInfo[] = {
+   //
+   // Loaded Image
+   //
+-  L"Image",
++  {L"Image",
+   SEnvImage,
+   SEnvImageTok,
+-  EFI_LOADED_IMAGE_PROTOCOL_GUID,
++  EFI_LOADED_IMAGE_PROTOCOL_GUID},
+   //
+   // Device Path
+   //
+-  L"Dpath",
++  {L"Dpath",
+   SEnvDPath,
+   SEnvDPathTok,
+-  EFI_DEVICE_PATH_PROTOCOL_GUID,
+-  L"ImageDpath",
++  EFI_DEVICE_PATH_PROTOCOL_GUID},
++  {L"ImageDpath",
+   SEnvDPath,
+   SEnvImageDPathTok,
+-  EFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOL_GUID,
+-  L"DpathUtil",
++  EFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOL_GUID},
++  {L"DpathUtil",
+   NULL,
+   NULL,
+-  EFI_DEVICE_PATH_UTILITIES_PROTOCOL_GUID,
+-  L"DpathToText",
++  EFI_DEVICE_PATH_UTILITIES_PROTOCOL_GUID},
++  {L"DpathToText",
+   NULL,
+   NULL,
+-  EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID,
+-  L"DpathFromText",
++  EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID},
++  {L"DpathFromText",
+   NULL,
+   NULL,
+-  EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_GUID,
+-  L"PcAnsi",
++  EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_GUID},
++  {L"PcAnsi",
+   NULL,
+   NULL,
+-  DEVICE_PATH_MESSAGING_PC_ANSI,
+-  L"Vt100",
++  DEVICE_PATH_MESSAGING_PC_ANSI},
++  {L"Vt100",
+   NULL,
+   NULL,
+-  DEVICE_PATH_MESSAGING_VT_100,
+-  L"Vt100+",
++  DEVICE_PATH_MESSAGING_VT_100},
++  {L"Vt100+",
+   NULL,
+   NULL,
+-  DEVICE_PATH_MESSAGING_VT_100_PLUS,
+-  L"VtUtf8",
++  DEVICE_PATH_MESSAGING_VT_100_PLUS},
++  {L"VtUtf8",
+   NULL,
+   NULL,
+-  DEVICE_PATH_MESSAGING_VT_UTF8,
++  DEVICE_PATH_MESSAGING_VT_UTF8},
+   //
+   // Driver Model
+   //
+-  L"DriverBinding",
++  {L"DriverBinding",
+   NULL,
+   NULL,
+-  EFI_DRIVER_BINDING_PROTOCOL_GUID,
+-  L"PlatformOverride",
++  EFI_DRIVER_BINDING_PROTOCOL_GUID},
++  {L"PlatformOverride",
+   NULL,
+   NULL,
+-  EFI_PLATFORM_DRIVER_OVERRIDE_PROTOCOL_GUID,
+-  L"BusSpecificDriverOverride",
++  EFI_PLATFORM_DRIVER_OVERRIDE_PROTOCOL_GUID},
++  {L"BusSpecificDriverOverride",
+   SEnvBusSpecificDriverOverride,
+   NULL,
+-  EFI_BUS_SPECIFIC_DRIVER_OVERRIDE_PROTOCOL_GUID,
+-  L"Diagnostics",
++  EFI_BUS_SPECIFIC_DRIVER_OVERRIDE_PROTOCOL_GUID},
++  {L"Diagnostics",
+   NULL,
+   NULL,
+-  EFI_DRIVER_DIAGNOSTICS_PROTOCOL_GUID,
+-  L"Diagnostics2",
++  EFI_DRIVER_DIAGNOSTICS_PROTOCOL_GUID},
++  {L"Diagnostics2",
+   NULL,
+   NULL,
+-  EFI_DRIVER_DIAGNOSTICS2_PROTOCOL_GUID,
+-  L"ComponentName",
++  EFI_DRIVER_DIAGNOSTICS2_PROTOCOL_GUID},
++  {L"ComponentName",
+   NULL,
+   NULL,
+-  EFI_COMPONENT_NAME_PROTOCOL_GUID,
+-  L"ComponentName2",
++  EFI_COMPONENT_NAME_PROTOCOL_GUID},
++  {L"ComponentName2",
+   NULL,
+   NULL,
+-  EFI_COMPONENT_NAME2_PROTOCOL_GUID,
+-  L"PlatformDriverConfig",
++  EFI_COMPONENT_NAME2_PROTOCOL_GUID},
++  {L"PlatformDriverConfig",
+   NULL,
+   NULL,
+-  EFI_PLATFORM_TO_DRIVER_CONFIGURATION_PROTOCOL_GUID,
+-  L"DriverEFIVersion",
++  EFI_PLATFORM_TO_DRIVER_CONFIGURATION_PROTOCOL_GUID},
++  {L"DriverEFIVersion",
+   SEnvDriverEFIVersion,
+   SEnvDriverEFIVersionTok,
+-  EFI_DRIVER_SUPPORTED_EFI_VERSION_PROTOCOL_GUID,
++  EFI_DRIVER_SUPPORTED_EFI_VERSION_PROTOCOL_GUID},
+   //
+   // Console Support
+   //
+-  L"TxtinEx",
++  {L"TxtinEx",
+   NULL,
+   NULL,
+-  EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID,
+-  L"Txtin",
++  EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID},
++  {L"Txtin",
+   NULL,
+   NULL,
+-  EFI_SIMPLE_TEXT_IN_PROTOCOL_GUID,
+-  L"Txtout",
++  EFI_SIMPLE_TEXT_IN_PROTOCOL_GUID},
++  {L"Txtout",
+   SEnvTextOut,
+   NULL,
+-  EFI_SIMPLE_TEXT_OUT_PROTOCOL_GUID,
+-  L"SimplePointer",
++  EFI_SIMPLE_TEXT_OUT_PROTOCOL_GUID},
++  {L"SimplePointer",
+   NULL,
+   NULL,
+-  EFI_SIMPLE_POINTER_PROTOCOL_GUID,
+-  L"AbsolutePointer",
++  EFI_SIMPLE_POINTER_PROTOCOL_GUID},
++  {L"AbsolutePointer",
+   NULL,
+   NULL,
+-  EFI_ABSOLUTE_POINTER_PROTOCOL_GUID,
+-  L"SerialIo",
++  EFI_ABSOLUTE_POINTER_PROTOCOL_GUID},
++  {L"SerialIo",
+   NULL,
+   NULL,
+-  EFI_SERIAL_IO_PROTOCOL_GUID,
+-  L"GraphicsOutput",
++  EFI_SERIAL_IO_PROTOCOL_GUID},
++  {L"GraphicsOutput",
+   SEnvGraphicsOutput,
+   NULL,
+-  EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID,
+-  L"EdidDiscovered",
++  EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID},
++  {L"EdidDiscovered",
+   NULL,
+   NULL,
+-  EFI_EDID_DISCOVERED_PROTOCOL_GUID,
+-  L"EdidActive",
++  EFI_EDID_DISCOVERED_PROTOCOL_GUID},
++  {L"EdidActive",
+   NULL,
+   NULL,
+-  EFI_EDID_ACTIVE_PROTOCOL_GUID,
+-  L"EdidOverride",
++  EFI_EDID_ACTIVE_PROTOCOL_GUID},
++  {L"EdidOverride",
+   NULL,
+   NULL,
+-  EFI_EDID_OVERRIDE_PROTOCOL_GUID,
+-  L"ConIn",
++  EFI_EDID_OVERRIDE_PROTOCOL_GUID},
++  {L"ConIn",
+   NULL,
+   NULL,
+-  EFI_CONSOLE_IN_DEVICE_GUID,
+-  L"ConOut",
++  EFI_CONSOLE_IN_DEVICE_GUID},
++  {L"ConOut",
+   NULL,
+   NULL,
+-  EFI_CONSOLE_OUT_DEVICE_GUID,
+-  L"StdErr",
++  EFI_CONSOLE_OUT_DEVICE_GUID},
++  {L"StdErr",
+   NULL,
+   NULL,
+-  EFI_STANDARD_ERROR_DEVICE_GUID,
++  EFI_STANDARD_ERROR_DEVICE_GUID},
+   //
+   // Media Access
+   //
+-  L"Load",
++  {L"Load",
+   NULL,
+   NULL,
+-  LOAD_FILE_PROTOCOL_GUID,
+-  L"Load2",
++  LOAD_FILE_PROTOCOL_GUID},
++  {L"Load2",
+   NULL,
+   NULL,
+-  EFI_LOAD_FILE2_PROTOCOL_GUID,
+-  L"Fs",
++  EFI_LOAD_FILE2_PROTOCOL_GUID},
++  {L"Fs",
+   NULL,
+   NULL,
+-  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID,
+-  L"GenFileInfo",
++  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID},
++  {L"GenFileInfo",
+   NULL,
+   NULL,
+-  EFI_FILE_INFO_ID,
+-  L"TapeIo",
++  EFI_FILE_INFO_ID},
++  {L"TapeIo",
+   NULL,
+   NULL,
+-  EFI_TAPE_IO_PROTOCOL_GUID,
+-  L"DiskIo",
++  EFI_TAPE_IO_PROTOCOL_GUID},
++  {L"DiskIo",
+   NULL,
+   NULL,
+-  EFI_DISK_IO_PROTOCOL_GUID,
+-  L"BlkIo",
++  EFI_DISK_IO_PROTOCOL_GUID},
++  {L"BlkIo",
+   SEnvBlkIo,
+   NULL,
+-  EFI_BLOCK_IO_PROTOCOL_GUID,
+-  L"UnicodeCollation",
++  EFI_BLOCK_IO_PROTOCOL_GUID},
++  {L"UnicodeCollation",
+   NULL,
+   NULL,
+-  EFI_UNICODE_COLLATION_PROTOCOL_GUID,
+-  L"UnicodeCollation2",
++  EFI_UNICODE_COLLATION_PROTOCOL_GUID},
++  {L"UnicodeCollation2",
+   NULL,
+   NULL,
+-  EFI_UNICODE_COLLATION2_PROTOCOL_GUID,
++  EFI_UNICODE_COLLATION2_PROTOCOL_GUID},
+   //
+   // PCI Bus Support
+   //
+-  L"PciRootBridgeIo",
++  {L"PciRootBridgeIo",
+   SEnvPciRootBridgeIo,
+   NULL,
+-  EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL_GUID,
+-  L"PciIo",
++  EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL_GUID},
++  {L"PciIo",
+   SEnvPciIo,
+   NULL,
+-  EFI_PCI_IO_PROTOCOL_GUID,
++  EFI_PCI_IO_PROTOCOL_GUID},
+   //
+   // SCSI Bus Support
+   //
+-  L"ScsiPassThru",
++  {L"ScsiPassThru",
+   NULL,
+   NULL,
+-  EFI_SCSI_PASS_THRU_PROTOCOL_GUID,
+-  L"ScsiIo",
++  EFI_SCSI_PASS_THRU_PROTOCOL_GUID},
++  {L"ScsiIo",
+   NULL,
+   NULL,
+-  EFI_SCSI_IO_PROTOCOL_GUID,
+-  L"ExtScsiPassThru",
++  EFI_SCSI_IO_PROTOCOL_GUID},
++  {L"ExtScsiPassThru",
+   NULL,
+   NULL,
+-  EFI_EXT_SCSI_PASS_THRU_PROTOCOL_GUID,
++  EFI_EXT_SCSI_PASS_THRU_PROTOCOL_GUID},
+   //
+   // iSCSI
+   //
+-  L"IScsiInitName",
++  {L"IScsiInitName",
+   NULL,
+   NULL,
+-  EFI_ISCSI_INITIATOR_NAME_PROTOCOL_GUID,
++  EFI_ISCSI_INITIATOR_NAME_PROTOCOL_GUID},
+   //
+   // USB Support
+   //
+-  L"UsbIo",
++  {L"UsbIo",
+   SEnvUsbIo,
+   NULL,
+-  EFI_USB_IO_PROTOCOL_GUID,
+-  L"UsbHc",
++  EFI_USB_IO_PROTOCOL_GUID},
++  {L"UsbHc",
+   NULL,
+   NULL,
+-  EFI_USB_HC_PROTOCOL_GUID,
+-  L"UsbHc2",
++  EFI_USB_HC_PROTOCOL_GUID},
++  {L"UsbHc2",
+   NULL,
+   NULL,
+-  EFI_USB2_HC_PROTOCOL_GUID,
++  EFI_USB2_HC_PROTOCOL_GUID},
+   //
+   // Debugger Support
+   //
+-  L"DebugSupport",
++  {L"DebugSupport",
+   SEnvDebugSupport,
+   NULL,
+-  EFI_DEBUG_SUPPORT_PROTOCOL_GUID,
+-  L"DebugPort",
++  EFI_DEBUG_SUPPORT_PROTOCOL_GUID},
++  {L"DebugPort",
+   NULL,
+   NULL,
+-  EFI_DEBUGPORT_PROTOCOL_GUID,
++  EFI_DEBUGPORT_PROTOCOL_GUID},
+   //
+   // Decompression Algorithm
+   //
+-  L"Decompress",
++  {L"Decompress",
+   NULL,
+   NULL,
+-  EFI_DECOMPRESS_PROTOCOL_GUID,
++  EFI_DECOMPRESS_PROTOCOL_GUID},
+   //
+   // ACPI
+   //
+-  L"AcpiTable",
++  {L"AcpiTable",
+   NULL,
+   NULL,
+-  EFI_ACPI_TABLE_PROTOCOL_GUID,
++  EFI_ACPI_TABLE_PROTOCOL_GUID},
+   //
+   // EBC
+   //
+-  L"EbcInterp",
++  {L"EbcInterp",
+   NULL,
+   NULL,
+-  EFI_EBC_INTERPRETER_PROTOCOL_GUID,
++  EFI_EBC_INTERPRETER_PROTOCOL_GUID},
+   //
+   // SNP, PXE, BIS
+   //
+-  L"Net",
++  {L"Net",
+   NULL,
+   NULL,
+-  EFI_SIMPLE_NETWORK_PROTOCOL_GUID,
+-  L"Nii",
++  EFI_SIMPLE_NETWORK_PROTOCOL_GUID},
++  {L"Nii",
+   NULL,
+   NULL,
+-  EFI_NETWORK_INTERFACE_IDENTIFIER_PROTOCOL_GUID,
+-  L"Pxebc",
++  EFI_NETWORK_INTERFACE_IDENTIFIER_PROTOCOL_GUID},
++  {L"Pxebc",
+   NULL,
+   NULL,
+-  EFI_PXE_BASE_CODE_PROTOCOL_GUID,
+-  L"PxebcCallback",
++  EFI_PXE_BASE_CODE_PROTOCOL_GUID},
++  {L"PxebcCallback",
+   NULL,
+   NULL,
+-  EFI_PXE_BASE_CODE_CALLBACK_PROTOCOL_GUID,
+-  L"Bis",
++  EFI_PXE_BASE_CODE_CALLBACK_PROTOCOL_GUID},
++  {L"Bis",
+   NULL,
+   NULL,
+-  EFI_BIS_PROTOCOL_GUID,
++  EFI_BIS_PROTOCOL_GUID},
+   //
+   // Managed Network
+   //
+-  L"MNPSb",
++  {L"MNPSb",
+   NULL,
+   NULL,
+-  EFI_MANAGED_NETWORK_SERVICE_BINDING_PROTOCOL_GUID,
+-  L"MNP",
++  EFI_MANAGED_NETWORK_SERVICE_BINDING_PROTOCOL_GUID},
++  {L"MNP",
+   NULL,
+   NULL,
+-  EFI_MANAGED_NETWORK_PROTOCOL_GUID,
++  EFI_MANAGED_NETWORK_PROTOCOL_GUID},
+   //
+   // ARP, DHCPv4
+   //
+-  L"ARPSb",
++  {L"ARPSb",
+   NULL,
+   NULL,
+-  EFI_ARP_SERVICE_BINDING_PROTOCOL_GUID,
+-  L"ARP",
++  EFI_ARP_SERVICE_BINDING_PROTOCOL_GUID},
++  {L"ARP",
+   NULL,
+   NULL,
+-  EFI_ARP_PROTOCOL_GUID,
+-  L"DHCPv4Sb",
++  EFI_ARP_PROTOCOL_GUID},
++  {L"DHCPv4Sb",
+   NULL,
+   NULL,
+-  EFI_DHCP4_SERVICE_BINDING_PROTOCOL_GUID,
+-  L"DHCPv4",
++  EFI_DHCP4_SERVICE_BINDING_PROTOCOL_GUID},
++  {L"DHCPv4",
+   NULL,
+   NULL,
+-  EFI_DHCP4_PROTOCOL_GUID,
++  EFI_DHCP4_PROTOCOL_GUID},
+   //
+   // TCPv4, IPv4 and Configuration
+   //
+-  L"TCPv4Sb",
++  {L"TCPv4Sb",
+   NULL,
+   NULL,
+-  EFI_TCP4_SERVICE_BINDING_PROTOCOL_GUID,
+-  L"TCPv4",
++  EFI_TCP4_SERVICE_BINDING_PROTOCOL_GUID},
++  {L"TCPv4",
+   NULL,
+   NULL,
+-  EFI_TCP4_PROTOCOL_GUID,
+-  L"IPv4Sb",
++  EFI_TCP4_PROTOCOL_GUID},
++  {L"IPv4Sb",
+   NULL,
+   NULL,
+-  EFI_IP4_SERVICE_BINDING_PROTOCOL_GUID,
+-  L"IPv4",
++  EFI_IP4_SERVICE_BINDING_PROTOCOL_GUID},
++  {L"IPv4",
+   NULL,
+   NULL,
+-  EFI_IP4_PROTOCOL_GUID,
+-  L"IPv4Config",
++  EFI_IP4_PROTOCOL_GUID},
++  {L"IPv4Config",
+   NULL,
+   NULL,
+-  EFI_IP4_CONFIG_PROTOCOL_GUID,
++  EFI_IP4_CONFIG_PROTOCOL_GUID},
+   //
+   // UDPv4, MTFTPv4
+   //
+-  L"UDPv4Sb",
++  {L"UDPv4Sb",
+   NULL,
+   NULL,
+-  EFI_UDP4_SERVICE_BINDING_PROTOCOL_GUID,
+-  L"UDPv4",
++  EFI_UDP4_SERVICE_BINDING_PROTOCOL_GUID},
++  {L"UDPv4",
+   NULL,
+   NULL,
+-  EFI_UDP4_PROTOCOL_GUID,
+-  L"MTFTPv4Sb",
++  EFI_UDP4_PROTOCOL_GUID},
++  {L"MTFTPv4Sb",
+   NULL,
+   NULL,
+-  EFI_MTFTP4_SERVICE_BINDING_PROTOCOL_GUID,
+-  L"MTFTPv4",
++  EFI_MTFTP4_SERVICE_BINDING_PROTOCOL_GUID},
++  {L"MTFTPv4",
+   NULL,
+   NULL,
+-  EFI_MTFTP4_PROTOCOL_GUID,
++  EFI_MTFTP4_PROTOCOL_GUID},
+   //
+   // Security
+   //
+-  L"AuthInfo",
++  {L"AuthInfo",
+   NULL,
+   NULL,
+-  EFI_AUTHENTICATION_INFO_PROTOCOL_GUID,
+-  L"HashSb",
++  EFI_AUTHENTICATION_INFO_PROTOCOL_GUID},
++  {L"HashSb",
+   NULL,
+   NULL,
+-  EFI_HASH_SERVICE_BINDING_PROTOCOL,
+-  L"Hash",
++  EFI_HASH_SERVICE_BINDING_PROTOCOL},
++  {L"Hash",
+   NULL,
+   NULL,
+-  EFI_HASH_PROTOCOL_GUID,
++  EFI_HASH_PROTOCOL_GUID},
+   //
+   // HII 
+   //
+ #if (EFI_SPECIFICATION_VERSION >= 0x0002000A)
+-  L"HiiFont",
++  {L"HiiFont",
+   NULL,
+   NULL,
+-  EFI_HII_FONT_PROTOCOL_GUID,
+-  L"HiiString",
++  EFI_HII_FONT_PROTOCOL_GUID},
++  {L"HiiString",
+   NULL,
+   NULL,
+-  EFI_HII_STRING_PROTOCOL_GUID,
+-  L"HiiImage",
++  EFI_HII_STRING_PROTOCOL_GUID},
++  {L"HiiImage",
+   NULL,
+   NULL,
+-  EFI_HII_IMAGE_PROTOCOL_GUID,
+-  L"HiiDatabase",
++  EFI_HII_IMAGE_PROTOCOL_GUID},
++  {L"HiiDatabase",
+   NULL,
+   NULL,
+-  EFI_HII_DATABASE_PROTOCOL_GUID,
++  EFI_HII_DATABASE_PROTOCOL_GUID},
+   //
+   // HII Configuration Processing and Browser
+   //
+-  L"HiiConfRouting",
++  {L"HiiConfRouting",
+   NULL,
+   NULL,
+-  EFI_HII_CONFIG_ROUTING_PROTOCOL_GUID,
+-  L"HiiConfAccess",
++  EFI_HII_CONFIG_ROUTING_PROTOCOL_GUID},
++  {L"HiiConfAccess",
+   NULL,
+   NULL,
+-  EFI_HII_CONFIG_ACCESS_PROTOCOL_GUID,
+-  L"FormBrowser2",
++  EFI_HII_CONFIG_ACCESS_PROTOCOL_GUID},
++  {L"FormBrowser2",
+   NULL,
+   NULL,
+-  EFI_FORM_BROWSER2_PROTOCOL_GUID,
++  EFI_FORM_BROWSER2_PROTOCOL_GUID},
+ #else
+-  L"Hii",
++  {L"Hii",
+   NULL,
+   NULL,
+-  EFI_HII_PROTOCOL_GUID,
+-  L"FormBrowser",
++  EFI_HII_PROTOCOL_GUID},
++  {L"FormBrowser",
+   NULL,
+   NULL,
+-  EFI_FORM_BROWSER_PROTOCOL_GUID,
+-  L"FormCallback",
++  EFI_FORM_BROWSER_PROTOCOL_GUID},
++  {L"FormCallback",
+   NULL,
+   NULL,
+-  EFI_FORM_CALLBACK_PROTOCOL_GUID,
++  EFI_FORM_CALLBACK_PROTOCOL_GUID},
+ #endif
+   //
+   // Shell Specific
+   //
+-  L"ShellInt",
++  {L"ShellInt",
+   NULL,
+   NULL,
+-  SHELL_INTERFACE_PROTOCOL,
+-  L"SEnv",
++  SHELL_INTERFACE_PROTOCOL},
++  {L"SEnv",
+   NULL,
+   NULL,
+-  ENVIRONMENT_VARIABLE_ID,
+-  L"ShellProtId",
++  ENVIRONMENT_VARIABLE_ID},
++  {L"ShellProtId",
+   NULL,
+   NULL,
+-  PROTOCOL_ID_ID,
+-  L"ShellDevPathMap",
++  PROTOCOL_ID_ID},
++  {L"ShellDevPathMap",
+   NULL,
+   NULL,
+-  DEVICE_PATH_MAPPING_ID,
+-  L"ShellAlias",
++  DEVICE_PATH_MAPPING_ID},
++  {L"ShellAlias",
+   NULL,
+   NULL,
+-  ALIAS_ID,
+-  L"G0",
++  ALIAS_ID},
++  {L"G0",
+   NULL,
+   NULL,
+-  {
+-    0,
+-    0,
+-    0,
+-    0,
+-    0,
+-    0,
+-    0,
+-    0,
+-    0,
+-    0,
+-    0
+-  },
++  { 0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0} }},
+   //
+   // Deprecated
+   //
+-  L"DevIo",
++  {L"DevIo",
+   NULL,
+   NULL,
+-  EFI_DEVICE_IO_PROTOCOL_GUID,
+-  L"Tcp",
++  EFI_DEVICE_IO_PROTOCOL_GUID},
++  {L"Tcp",
+   NULL,
+   NULL,
+-  EFI_TCP_PROTOCOL_GUID,
+-  L"UgaDraw",
++  EFI_TCP_PROTOCOL_GUID},
++  {L"UgaDraw",
+   NULL,
+   NULL,
+-  EFI_UGA_DRAW_PROTOCOL_GUID,
+-  L"UgaIo",
++  EFI_UGA_DRAW_PROTOCOL_GUID},
++  {L"UgaIo",
+   NULL,
+   NULL,
+-  EFI_UGA_IO_PROTOCOL_GUID,
+-  L"Efi",
++  EFI_UGA_IO_PROTOCOL_GUID},
++  {L"Efi",
+   NULL,
+   NULL,
+-  EFI_GLOBAL_VARIABLE_GUID,
+-  L"FileSysInfo",
++  EFI_GLOBAL_VARIABLE_GUID},
++  {L"FileSysInfo",
+   NULL,
+   NULL,
+-  EFI_FILE_SYSTEM_INFO_ID_GUID,
+-  L"ESP",
++  EFI_FILE_SYSTEM_INFO_ID_GUID},
++  {L"ESP",
+   NULL,
+   NULL,
+-  EFI_PART_TYPE_EFI_SYSTEM_PART_GUID,
+-  L"GPT MBR",
++  EFI_PART_TYPE_EFI_SYSTEM_PART_GUID},
++  {L"GPT MBR",
+   NULL,
+   NULL,
+-  EFI_PART_TYPE_LEGACY_MBR_GUID,
+-  L"Configuration",
++  EFI_PART_TYPE_LEGACY_MBR_GUID},
++  {L"Configuration",
+   NULL,
+   NULL,
+-  EFI_DRIVER_CONFIGURATION_PROTOCOL_GUID,
+-  L"Configuration2",
++  EFI_DRIVER_CONFIGURATION_PROTOCOL_GUID},
++  {L"Configuration2",
+   NULL,
+   NULL,
+-  EFI_DRIVER_CONFIGURATION2_PROTOCOL_GUID,
+-  L"IsaIo",
++  EFI_DRIVER_CONFIGURATION2_PROTOCOL_GUID},
++  {L"IsaIo",
+   SEnvIsaIo,
+   NULL,
+-  EFI_ISA_IO_PROTOCOL_GUID,
+-  L"IsaAcpi",
++  EFI_ISA_IO_PROTOCOL_GUID},
++  {L"IsaAcpi",
+   NULL,
+   NULL,
+-  EFI_ISA_ACPI_PROTOCOL_GUID,
++  EFI_ISA_ACPI_PROTOCOL_GUID},
+   //
+   // NT32
+   //
+ #if (PLATFORM == NT32)
+-  L"WinNtThunk",
++  {L"WinNtThunk",
+   NULL,
+   NULL,
+-  LOCAL_EFI_WIN_NT_THUNK_PROTOCOL_GUID,
+-  L"WinNtDriverIo",
++  LOCAL_EFI_WIN_NT_THUNK_PROTOCOL_GUID},
++  {L"WinNtDriverIo",
+   NULL,
+   NULL,
+-  LOCAL_EFI_WIN_NT_BUS_DRIVER_IO_PROTOCOL_GUID,
+-  L"SerialPrivate",
++  LOCAL_EFI_WIN_NT_BUS_DRIVER_IO_PROTOCOL_GUID},
++  {L"SerialPrivate",
+   NULL,
+   NULL,
+-  LOCAL_EFI_WIN_NT_SERIAL_PORT_GUID,
++  LOCAL_EFI_WIN_NT_SERIAL_PORT_GUID},
+ #endif
+ 
+-  L"Unknown Device",
++  {L"Unknown Device",
+   NULL,
+   NULL,
+-  UNKNOWN_DEVICE_GUID,
+-  NULL
++  UNKNOWN_DEVICE_GUID},
++
++  {
++    NULL
++  }
+ };
+ 
+ //
+diff --git a/shellenv/shelle.h b/shellenv/shelle.h
+index 80f3f7c..6ec5ba2 100644
+--- a/shellenv/shelle.h
++++ b/shellenv/shelle.h
+@@ -61,7 +61,7 @@ Revision History
+ //
+ #define SHELL_GLOBALVAR_PROTOCOL \
+   { \
+-    0x47c7b222, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b \
++    0x47c7b222, 0xc42a, 0x11d2, {0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b} \
+   }
+ 
+ //
+@@ -72,22 +72,22 @@ Revision History
+ //
+ #define ENVIRONMENT_VARIABLE_ID \
+   { \
+-    0x47c7b224, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b \
++    0x47c7b224, 0xc42a, 0x11d2, {0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b} \
+   }
+ 
+ #define DEVICE_PATH_MAPPING_ID \
+   { \
+-    0x47c7b225, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b \
++    0x47c7b225, 0xc42a, 0x11d2, {0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b} \
+   }
+ 
+ #define PROTOCOL_ID_ID \
+   { \
+-    0x47c7b226, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b \
++    0x47c7b226, 0xc42a, 0x11d2, {0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b} \
+   }
+ 
+ #define ALIAS_ID \
+   { \
+-    0x47c7b227, 0xc42a, 0x11d2, 0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b \
++    0x47c7b227, 0xc42a, 0x11d2, {0x8e, 0x57, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b} \
+   }
+ 
+ //
+diff --git a/shellenv/shellenvguid.h b/shellenv/shellenvguid.h
+index 6766662..2f918d0 100644
+--- a/shellenv/shellenvguid.h
++++ b/shellenv/shellenvguid.h
+@@ -31,7 +31,7 @@ Revision History
+ //
+ #define EFI_SHELLENV_GUID \
+   { \
+-    0xfba5c4bc, 0xf12f, 0x4caa, 0xa0, 0x10, 0xc9, 0x4, 0x61, 0x56, 0x23, 0xb9 \
++    0xfba5c4bc, 0xf12f, 0x4caa, {0xa0, 0x10, 0xc9, 0x4, 0x61, 0x56, 0x23, 0xb9} \
+   }
+ 
+ extern EFI_HII_HANDLE HiiEnvHandle;
+diff --git a/stall/stall.h b/stall/stall.h
+index a326e41..6e569c0 100644
+--- a/stall/stall.h
++++ b/stall/stall.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_STALL_GUID \
+   { \
+-    0xc17a7da5, 0xcf05, 0x4c80, 0xa3, 0x30, 0x74, 0xe6, 0x44, 0xd4, 0x4e, 0x98 \
++    0xc17a7da5, 0xcf05, 0x4c80, {0xa3, 0x30, 0x74, 0xe6, 0x44, 0xd4, 0x4e, 0x98} \
+   }
+ 
+ #endif
+diff --git a/time/time.h b/time/time.h
+index e9ff6c9..e786e7d 100644
+--- a/time/time.h
++++ b/time/time.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_TIME_GUID \
+   { \
+-    0x710bb076, 0xdd2d, 0x4c8f, 0x9d, 0x58, 0x83, 0x37, 0x1b, 0x18, 0xbd, 0xae \
++    0x710bb076, 0xdd2d, 0x4c8f, {0x9d, 0x58, 0x83, 0x37, 0x1b, 0x18, 0xbd, 0xae} \
+   }
+ 
+ #endif
+diff --git a/touch/touch.h b/touch/touch.h
+index 6aceaf5..9edfd3a 100644
+--- a/touch/touch.h
++++ b/touch/touch.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_TOUCH_GUID \
+   { \
+-    0xa16a4695, 0x5815, 0x4d4f, 0xb8, 0xe, 0x6a, 0xf, 0x88, 0xac, 0xdb, 0x6c \
++    0xa16a4695, 0x5815, 0x4d4f, {0xb8, 0xe, 0x6a, 0xf, 0x88, 0xac, 0xdb, 0x6c} \
+   }
+ 
+ #endif
+diff --git a/type/type.h b/type/type.h
+index b3c170c..fb57ac3 100644
+--- a/type/type.h
++++ b/type/type.h
+@@ -26,7 +26,7 @@ Revision History
+ 
+ #define EFI_TYPE_GUID \
+   { \
+-    0x586ebd48, 0xcfa2, 0x476a, 0xad, 0xe1, 0x55, 0x12, 0xa2, 0x71, 0xdc, 0x88 \
++    0x586ebd48, 0xcfa2, 0x476a, {0xad, 0xe1, 0x55, 0x12, 0xa2, 0x71, 0xdc, 0x88} \
+   }
+ 
+ #endif
+diff --git a/tzone/tzone.h b/tzone/tzone.h
+index 08e049f..5e468e7 100644
+--- a/tzone/tzone.h
++++ b/tzone/tzone.h
+@@ -28,10 +28,7 @@ Revision History
+ 
+ #define EFI_TZONE_GUID \
+   { \
+-    0x8a34eb81, 0xd290, 0x4877, \
+-    { \
+-      0xa7, 0x7b, 0x3a, 0x16, 0xd8, 0xe2, 0xf6, 0xaa \
+-    } \
++    0x8a34eb81, 0xd290, 0x4877, {0xa7, 0x7b, 0x3a, 0x16, 0xd8, 0xe2, 0xf6, 0xaa} \
+   }
+ 
+ #endif
+diff --git a/unload/unload.h b/unload/unload.h
+index d6da802..3ce2d04 100644
+--- a/unload/unload.h
++++ b/unload/unload.h
+@@ -29,10 +29,7 @@ Revision History
+ //
+ #define EFI_UNLOAD_GUID \
+   { \
+-    0x409060f4, 0x3e7b, 0x44cc, \
+-    { \
+-      0x9d, 0xfd, 0xa8, 0xe8, 0x7, 0x47, 0x48, 0x88 \
+-    } \
++    0x409060f4, 0x3e7b, 0x44cc, {0x9d, 0xfd, 0xa8, 0xe8, 0x7, 0x47, 0x48, 0x88} \
+   }
+ 
+ #endif
+diff --git a/ver/ver.h b/ver/ver.h
+index 770e82f..e5ad07c 100644
+--- a/ver/ver.h
++++ b/ver/ver.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_VER_GUID \
+   { \
+-    0xbe5924a7, 0x1cbd, 0x488b, 0xb1, 0x16, 0xad, 0xbe, 0x79, 0x72, 0x79, 0xb2 \
++    0xbe5924a7, 0x1cbd, 0x488b, {0xb1, 0x16, 0xad, 0xbe, 0x79, 0x72, 0x79, 0xb2} \
+   }
+ 
+ VOID
+diff --git a/vol/vol.h b/vol/vol.h
+index 0d345dd..4619526 100644
+--- a/vol/vol.h
++++ b/vol/vol.h
+@@ -28,7 +28,7 @@ Revision History
+ //
+ #define EFI_VOL_GUID \
+   { \
+-    0xde670178, 0xf114, 0x45e5, 0x8a, 0xc0, 0x1d, 0xdf, 0x58, 0x89, 0x38, 0xda \
++    0xde670178, 0xf114, 0x45e5, {0x8a, 0xc0, 0x1d, 0xdf, 0x58, 0x89, 0x38, 0xda} \
+   }
+ 
+ #endif
